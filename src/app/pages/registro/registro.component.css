@@ -1,0 +1,14 @@
+.success{
+    background-color:#28A745;
+    color: white;
+}
+
+.warning{
+    background-color: #FFC107;
+    color: black;
+}
+
+.error{
+    background-color: #DC3545;
+    color: white;
+}

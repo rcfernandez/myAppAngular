@@ -1,0 +1,129 @@
+<div class="container">
+
+  <div class="row">
+    <h1 class="titulo">Categorias</h1>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-3" style="margin-top: 10px;">
+    
+      <mat-card>
+      
+        <form class="example-form" [formGroup]="myForm">
+
+          <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+
+          <!-- id -->
+          <mat-form-field class="example-full-width">
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="_id" [(ngModel)]="usuariosService.selectedUsuario._id" disabled>
+          </mat-form-field>
+
+          <!-- usuario - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>usuario</mat-label>
+            <input matInput formControlName="usuario" [(ngModel)]="usuariosService.selectedUsuario.usuario" >
+            <mat-error *ngIf="myForm.get('usuario').hasError('required') && myForm.get('usuario').dirty ">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- nombre - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>nombre</mat-label>
+            <input matInput formControlName="nombre" [(ngModel)]="usuariosService.selectedUsuario.nombre" >
+            <mat-error *ngIf="myForm.get('nombre').hasError('required') && myForm.get('nombre').dirty ">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- apellido - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>apellido</mat-label>
+            <input matInput formControlName="apellido" [(ngModel)]="usuariosService.selectedUsuario.apellido" >
+            <mat-error *ngIf="myForm.get('apellido').hasError('required') && myForm.get('apellido').dirty ">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- telefono - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>telefono</mat-label>
+            <input matInput formControlName="telefono" [(ngModel)]="usuariosService.selectedUsuario.telefono" >
+            <mat-error *ngIf="myForm.get('telefono').hasError('required') && myForm.get('telefono').dirty ">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- email - oblig - email valid -->
+          <mat-form-field class="example-full-width">
+            <mat-label>email</mat-label>
+            <input type="email" matInput formControlName="email" [(ngModel)]="usuariosService.selectedUsuario.email" >
+              <mat-error *ngIf="myForm.get('email').hasError('required') && myForm.get('email').dirty">
+                El campo es <strong>Requerido</strong>
+              </mat-error>
+              <mat-error *ngIf="myForm.get('email').hasError('email') && myForm.get('email').dirty ">
+                Por favor, introduzca un email valido
+              </mat-error>
+            
+          </mat-form-field>
+
+          <!-- password - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>password</mat-label>
+            <input type="password" matInput formControlName="password" [(ngModel)]="usuariosService.selectedUsuario.password" >
+            <mat-error *ngIf="myForm.get('password').hasError('required') && myForm.get('password').dirty ">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
+ 
+          <mat-card-actions>
+            <button mat-raised-button color="primary" [disabled]="myForm.invalid" (click)="alta()">Guardar</button>
+            <button mat-button (click)="resetForm()">Limpiar</button>
+          </mat-card-actions>
+
+        </form>
+        
+      </mat-card>
+    
+    </div>
+
+    <div class="col-md-9">
+    
+      <ngx-datatable
+        class="material"
+        [rows]=dato.docs
+        [headerHeight]="50"
+        [footerHeight]="50"
+        rowHeight="auto"
+        columnMode="force"
+        [externalPaging]="true"
+        [count]=dato.totalDocs
+        [limit]=dato.limit
+        (page)="setPage($event)"
+        (activate)="modificar($event)"
+        >
+        <ngx-datatable-column name="Imagen" prop="id" >
+          <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
+            <img class="img-thumbnail" style="height: auto; width: 100px;" src="https://picsum.photos/200/200" alt="Card image cap"/>
+          </ng-template>  
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+    
+        <ngx-datatable-column name="Acciones" prop="id" >
+          <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
+            <a class="waves-effect waves-light btn"><i class="material-icons">edit</i></a>
+            <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
+          </ng-template>  
+        </ngx-datatable-column>
+    
+      </ngx-datatable>
+
+    </div>
+    
+  
+  </div> <!--row-->
+
+</div> <!--container-->

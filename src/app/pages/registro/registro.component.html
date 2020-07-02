@@ -1,0 +1,75 @@
+<div class="container py-3">
+  <h1>Registro</h1>
+
+  <form [formGroup]="myForm" (ngSubmit)="registro()">
+    
+    <!-- nombre -->
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input type="text" formControlName="nombre" class="form-control" [ngClass]="{  
+                      error:myForm.get('nombre').hasError('required') && myForm.get('nombre').dirty,
+                      warning:( myForm.get('nombre').hasError('minlength') || myForm.get('nombre').hasError('maxlength') ) && myForm.get('nombre').dirty
+                   }">
+      <div *ngIf="myForm.get('nombre').errors && myForm.get('nombre').dirty">
+        <p *ngIf="myForm.get('nombre').hasError('required')">El campo nombre es obligatorio</p>
+        <p *ngIf="myForm.get('nombre').hasError('minlength')">El campo tiene que tener al menos 2 caracteres</p>
+        <p *ngIf="myForm.get('nombre').hasError('maxlength')">El campo tiene que tener menos de 10 caracteres</p>
+      </div>
+    </div>
+    
+    <!-- apellido -->
+    <div class="form-group">
+      <label for="apellido">Apellido</label>
+      <input type="text" class="form-control" formControlName="apellido" [ngClass]="{  
+        error:myForm.get('apellido').hasError('required') && myForm.get('apellido').dirty,
+        warning:( myForm.get('apellido').hasError('minlength') || myForm.get('apellido').hasError('maxlength') ) && myForm.get('apellido').dirty
+      }">
+      <div *ngIf="myForm.get('apellido').errors && myForm.get('apellido').dirty">
+        <p *ngIf="myForm.get('apellido').hasError('required')">El campo nombre es obligatorio</p>
+        <p *ngIf="myForm.get('apellido').hasError('minlength')">El campo tiene que tener al menos 2 caracteres</p>
+        <p *ngIf="myForm.get('apellido').hasError('maxlength')">El campo tiene que tener menos de 10 caracteres</p>
+      </div>
+    </div>
+
+    <!-- Telefono -->
+    <div class="form-group">
+      <label for="telefono">Teléfono</label>
+      <input type="text" class="form-control" formControlName="telefono" [ngClass]="{  
+        error:myForm.get('telefono').hasError('required') && myForm.get('telefono').dirty
+      }">
+      <div *ngIf="myForm.get('telefono').errors && myForm.get('telefono').dirty">
+        <p *ngIf="myForm.get('telefono').hasError('required')">El campo email es obligatorio</p>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" formControlName="email">
+      <div *ngIf="myForm.get('email').errors && myForm.get('email').dirty">
+        <p *ngIf="myForm.get('email').hasError('required')">El campo email es obligatorio</p>
+        <p *ngIf="myForm.get('email').hasError('email')">El campo Email debe tener un formato correcto</p>
+      </div>
+    </div>
+    
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" formControlName="password" [ngClass]="{  
+                      error:myForm.get('password').hasError('required') && myForm.get('password').dirty,
+                      warning:myForm.get('password').hasError('minlength') && myForm.get('password').dirty
+                    }">
+      <div *ngIf="myForm.get('password').errors && myForm.get('password').dirty">
+        <p *ngIf="myForm.get('password').hasError('required')">El campo es obligatorio</p>
+        <p *ngIf="myForm.get('password').hasError('minlength')">El campo tiene que tener al menos de 2 caracteres</p>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" [disabled]="myForm.invalid" class="btn btn-primary">Submit</button>
+
+  </form>
+
+
+
+</div>

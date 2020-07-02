@@ -1,0 +1,25 @@
+<ngx-datatable
+    class="material"
+    [rows]='source.docs'
+    columnMode="force"
+
+    [headerHeight]="50"
+    [footerHeight]="50"
+    rowHeight="auto"
+
+    [externalPaging]="true"
+    [count]="source.totalDocs"
+    [limit]="source.limit"
+    (page)="$event"
+    >
+    
+    <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+    
+    <ngx-datatable-column name="Acciones" prop="id" >
+        <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
+        <a class="waves-effect waves-light btn"><i class="material-icons">edit</i></a>
+        <a class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
+        </ng-template>  
+    </ngx-datatable-column>
+    
+</ngx-datatable>

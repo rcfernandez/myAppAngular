@@ -1,0 +1,87 @@
+<div class="container">
+
+  <div class="row">
+    <h1 class="titulo">Categorias</h1>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-3" style="margin-top: 10px;">
+    
+      <mat-card>
+      
+        <form class="example-form" [formGroup]="myForm">
+
+          <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+
+          <!-- id -->
+          <mat-form-field class="example-full-width">
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="_id" [(ngModel)]="categoriasService.selectedCategoria._id" disabled>
+          </mat-form-field>
+
+          <!-- descripcion - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>Descripción</mat-label>
+            <input matInput formControlName="descripcion" [(ngModel)]="categoriasService.selectedCategoria.descripcion" >
+            <mat-error *ngIf="myForm.get('descripcion').hasError('required') && myForm.get('descripcion').dirty ">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
+ 
+          <mat-card-actions>
+            <button mat-raised-button color="primary" [disabled]="myForm.invalid" (click)="alta()">Guardar</button>
+            <button mat-button (click)="resetForm()">Limpiar</button>
+          </mat-card-actions>
+
+        </form>
+        
+      </mat-card>
+    
+    </div>
+
+    <div class="col-md-9">
+    
+      <ngx-datatable
+        class="material"
+        [rows]=dato.docs
+        [headerHeight]="50"
+        [footerHeight]="50"
+        rowHeight="auto"
+        columnMode="force"
+        [externalPaging]="true"
+        [count]=dato.totalDocs
+        [limit]=dato.limit
+        (page)="setPage($event)"
+        (activate)="modificar($event)"
+        >
+        <ngx-datatable-column name="Imagen" prop="id" >
+          <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
+            <img class="img-thumbnail" style="height: auto; width: 100px;" src="https://picsum.photos/200/200" alt="Card image cap"/>
+          </ng-template>  
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+    
+        <ngx-datatable-column name="Acciones" prop="id" >
+          <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
+            <a class="waves-effect waves-light btn"><i class="material-icons">edit</i></a>
+            <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
+          </ng-template>  
+        </ngx-datatable-column>
+    
+      </ngx-datatable>
+
+    </div>
+    
+  
+  </div> <!--row-->
+
+</div> <!--container-->
+
+
+
+
+
+
+
