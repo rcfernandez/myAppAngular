@@ -13,18 +13,29 @@
       
         <form class="example-form" [formGroup]="myForm">
 
-          <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
 
+          <!-- sube/edita tocando la imagen -->
+          <!-- <div class="image-upload">
+            <label for="photo">
+              <img mat-card-image src="http://localhost:3000/images/productos/{{imagenSeleccionada}}" alt="Foto de producto">
+            </label>
+            <input type="file" id="photo" name="photo" ng2FileSelect [uploader]="uploader" (change)="cambiarImagen($event)"/>
+          </div> -->
+
+          <img mat-card-image src="http://localhost:3000/images/productos/{{imagenSeleccionada}}" alt="Foto de producto">
+      
           <!-- id -->
           <mat-form-field class="example-full-width">
             <mat-label>ID</mat-label>
-            <input matInput formControlName="_id" [(ngModel)]="productosService.selectedProducto._id" disabled>
+            <!-- <input matInput formControlName="_id" [(ngModel)]="productosService.selectedProducto._id"> -->
+            <input matInput formControlName="_id">
           </mat-form-field>
 
           <!-- nombre - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre" [(ngModel)]="productosService.selectedProducto.nombre" >
+            <!-- <input matInput formControlName="nombre" [(ngModel)]="productosService.selectedProducto.nombre" > -->
+            <input matInput formControlName="nombre" >
             <mat-error *ngIf="myForm.get('nombre').hasError('required') && myForm.get('nombre').dirty ">
               El campo es <strong>Requerido</strong>
             </mat-error>
@@ -33,7 +44,8 @@
           <!-- descripcion - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>descripcion</mat-label>
-            <input matInput formControlName="descripcion" [(ngModel)]="productosService.selectedProducto.descripcion" >
+            <!-- <input matInput formControlName="descripcion" [(ngModel)]="productosService.selectedProducto.descripcion" > -->
+            <input matInput formControlName="descripcion">
             <mat-error *ngIf="myForm.get('descripcion').hasError('required') && myForm.get('descripcion').dirty">
               El campo es <strong>Requerido</strong>
             </mat-error>
@@ -42,26 +54,32 @@
           <!-- precio - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>precio</mat-label>
-            <input type="number" matInput formControlName="precio" [(ngModel)]="productosService.selectedProducto.precio" >
+            <!-- <input type="number" matInput formControlName="precio" [(ngModel)]="productosService.selectedProducto.precio" > -->
+            <input type="number" matInput formControlName="precio" >
           </mat-form-field>
 
           <!-- cantidad -->
           <mat-form-field class="example-full-width">
             <mat-label>cantidad</mat-label>
-            <input type="number" matInput formControlName="cantidad" [(ngModel)]="productosService.selectedProducto.cantidad" >
+            <!-- <input type="number" matInput formControlName="cantidad" [(ngModel)]="productosService.selectedProducto.cantidad" > -->
+            <input type="number" matInput formControlName="cantidad" >
           </mat-form-field>
 
           <!-- categoria -->
           <mat-form-field class="example-full-width" >
             <mat-label>Categoria</mat-label>
-            <mat-select formControlName="categoria" [(ngModel)]="productosService.selectedProducto.categoria._id">
+            <!-- <mat-select formControlName="categoria" [(ngModel)]="productosService.selectedProducto.categoria._id"> -->
+            <mat-select formControlName="categoria">
               <mat-option *ngFor="let item of categorias" [value]="item._id" >{{ item.descripcion }}</mat-option>
             </mat-select>
           </mat-form-field>
-
+          
+          <input type="file" name="photo" ng2FileSelect [uploader]="uploader" (change)=onChange($event) />
+         
           <!-- destacado -->
           <mat-form-field class="example-full-width">
-            <input type="number" matInput formControlName="destacado" [(ngModel)]="productosService.selectedProducto.destacado" hidden>
+            <!-- <input type="number" matInput formControlName="destacado" [(ngModel)]="productosService.selectedProducto.destacado" hidden> -->
+            <input type="number" matInput formControlName="destacado" hidden>
             <mat-slide-toggle input type="number" formControlName="destacado" [(ngModel)]="productosService.selectedProducto.destacado"
               class="example-margin"
               [color]="'primary'"
@@ -70,7 +88,6 @@
             </mat-slide-toggle>
           </mat-form-field>
 
-          <input type="file" name="photo" formControlName="imagen" ng2FileSelect [uploader]="uploader" />
  
           <mat-card-actions>
             <button mat-raised-button color="primary" [disabled]="myForm.invalid" (click)="alta()">Guardar</button>
@@ -85,37 +102,37 @@
 
     <!-- lado derecha -->
     <div class="col-md-9">
-
          
-          <ngx-datatable
-              class="material"
-              [rows]=dato.docs
-              [headerHeight]="50"
-              [footerHeight]="50"
-              rowHeight="auto"
-              columnMode="force"
-              [externalPaging]="true"
-              [count]="dato.totalDocs"
-              [limit]="dato.limit"
-              (page)="setPage($event)"
-              (activate)="modificar2($event)"
-              >
-              <ngx-datatable-column name="Imagen" prop="id" >
-                <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
-                  <img class="img-thumbnail" style="height: auto; width: 100px;" src="https://picsum.photos/200/200" alt="Card image cap"/>
-                </ng-template>  
-              </ngx-datatable-column>
-              
-              <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+      <ngx-datatable
+          class="material"
+          [rows]=dato.docs
+          [headerHeight]="50"
+          [footerHeight]="50"
+          rowHeight="auto"
+          columnMode="force"
+          [externalPaging]="true"
+          [count]="dato.totalDocs"
+          [limit]="dato.limit"
+          (page)="setPage($event)"
+          (activate)="onActivate($event)"
+          >
           
-              <ngx-datatable-column name="Acciones" prop="id" >
-                <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
-                  <a class="waves-effect waves-light btn"><i class="material-icons">edit</i></a>
-                  <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
-                </ng-template>  
-              </ngx-datatable-column>
-          
-            </ngx-datatable>
+          <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+
+          <ngx-datatable-column name="Imagen" prop="imagen">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <img src="http://localhost:3000/images/productos/{{row.imagen.filename}}" alt="Foto de producto" width="50" height="50"> 
+            </ng-template>  
+          </ngx-datatable-column>
+      
+          <ngx-datatable-column name="Eliminar" prop="id" >
+            <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template >
+              <!-- <a class="waves-effect waves-light btn"><i class="material-icons">edit</i></a> -->
+              <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
+            </ng-template>  
+          </ngx-datatable-column>
+      
+        </ngx-datatable>
       
     </div>
 

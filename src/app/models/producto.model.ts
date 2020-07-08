@@ -1,13 +1,13 @@
-// export interface Imagen {
-//   fieldname: string,
-//   originalname: string,
-//   encoding: string,
-//   mimetype: string,
-//   destination: string,
-//   filename: string,
-//   path: string,
-//   size: string,
-// }
+export interface Imagen {
+  fieldname: string,
+  originalname: string,
+  encoding: string,
+  mimetype: string,
+  destination: string,
+  filename: string,
+  path: string,
+  size: string,
+}
 
 export class Producto {
   _id: string;
@@ -17,7 +17,7 @@ export class Producto {
   cantidad: number;
   categoria: any;
   destacado: number;
-  imagen: any
+  imagen: Imagen
 
   constructor(
     id = '',
@@ -27,7 +27,7 @@ export class Producto {
     cantidad = 0,
     categoria = {},
     destacado = 0,
-    imagen = {}
+    imagen = null
   ) {
     this._id = id;
     this.nombre = nombre;

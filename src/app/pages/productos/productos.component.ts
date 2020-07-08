@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/productos.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoriasService } from '../../services/categorias.service';
-import { Producto } from '../../models/producto.model';
+import { Producto, Imagen } from '../../models/producto.model';
 import { Categoria } from 'src/app/models/categoria.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dato } from 'src/app/models/dato.model';
@@ -19,21 +19,25 @@ const URL = "http://localhost:3000/productos/upload"
 
 export class ProductosComponent implements OnInit {
   
-  //Instanciar variabled uploader
-  public uploader: FileUploader = new FileUploader({
-    url: URL,
-    itemAlias: "photo"
-  });
-
+  myForm: FormGroup;
   productos: Producto[];
   categorias: Categoria[];
-  myForm: FormGroup;
-
   
-  imagen:Array<any>=[];
+  //Instanciar uploader
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: "photo" });
+  
+  //imagen:Array<any>=[];
+  imagenSeleccionada = "placeholder-image.png"
+  changeImage: Boolean = false;
 
   dato: Dato;
   columns=[];
+
+  configSnackBar = {
+    duration: 2000,
+    x: "right" as any,
+    y: "top" as any
+  }
 
   constructor(
     public productosService: ProductosService,
@@ -44,8 +48,6 @@ export class ProductosComponent implements OnInit {
       this.prepareForm();
       this.prepareColumns()
       this.traerCategorias();      
-
-      
     }
 
   ngOnInit(): void {
@@ -53,27 +55,6 @@ export class ProductosComponent implements OnInit {
     this.setPage({ offset: 0 }); //SetPage en base a una pagina consulta productos a express
    
 
-  }
-
-  uploadImage(){
-
-       //sube la imagen
-       this.uploader.uploadAll();
-
-    //override the onAfterAddingfile property of the uploader so it doesn't authenticate with //credentials.
-    this.uploader.onAfterAddingFile = (file) => {
-      file.withCredentials = false;
-    };
-    
-    //overide the onCompleteItem property of the uploader so we are 
-    //able to deal with the server response.
-    this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
-      
-      console.log("Imagen subida item, status, response: ", item, status, response);
-      let json = JSON.parse(response);
-      console.log("json data: ", json["data"])
-      this.myForm.get('imagen').setValue(json["data"])
-    };
   }
 
   prepareForm(){
@@ -84,7 +65,7 @@ export class ProductosComponent implements OnInit {
       precio: [0],
       cantidad: [0],
       categoria: [''],
-      destacado: [0],
+      destacado: ['0'],
       imagen:['']
     });
   }
@@ -97,7 +78,6 @@ export class ProductosComponent implements OnInit {
       { name:'Cantidad',prop:'cantidad' }, 
       { name:'Categoria',prop:'categoria.descripcion' },
       { name:'Destacado',prop:'destacado' }, 
-      { name:'Imagen', prop: 'imagen.path'},
     ]
   }
 
@@ -107,30 +87,68 @@ export class ProductosComponent implements OnInit {
     });
   }
 
+  onChange(event){
+
+    if(event.type == 'change'){
+      this.changeImage = true;
+    }
+
+  }
+
   alta() {
 
-    this.uploadImage();
+    if(this.changeImage){
+      
+      this.uploader.uploadAll();
   
+      this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
+        
+        console.log("Imagen subida, item: ", item ,"status: ", status, "response: ", response);
+        let json = JSON.parse(response);
+        console.log("json data: ", json["data"]);
+        this.myForm.get('imagen').setValue(json["data"]);
+  
+        
+        this.guardar();
+  
+      };
+    }
+    else {
+      this.guardar();
+
+    }
+   
+  }
+
+  guardar(){
+
     if(this.myForm.controls["_id"].value){
       // modificacion
+
+      console.log("MODIFICAR this.myForm.value: ", this.myForm.value)
+
       this.productosService.updateProducto(this.myForm.controls["_id"].value, this.myForm.value).subscribe((data) => {
       });
       this.openSnackBar("Se ha modificado correctamente");
-      //this.resetForm();
+      this.resetForm();
     }
     // alta
     else{
-      console.log("this.myForm.value: ", this.myForm.value);
+    console.log("CREAR this.myForm.value: ", this.myForm.value)
+
       this.productosService.createProducto(this.myForm.value).subscribe((data) => {
         console.log("Respuesta de CreateProducto: ", data);
       });
-     // this.resetForm();
+    // this.resetForm();
       this.openSnackBar("Se ha generado correctamente");
+      this.resetForm()
     }
+
   }
 
-  modificar(producto: Producto) {
-    this.productosService.selectedProducto = producto;
+
+  cargarForm(producto: Producto) {
+    //this.productosService.selectedProducto = producto;
     this.myForm = this.fb.group({
       _id: [producto._id],
       nombre: [producto.nombre, Validators.required],
@@ -141,29 +159,32 @@ export class ProductosComponent implements OnInit {
       destacado: [producto.destacado],
       imagen: [producto.imagen],
     });
+    this.imagenSeleccionada = producto.imagen.filename;
   }
 
-  modificar2(event) {
+  onActivate(event) {
     if(event.type == 'click') {
-      this.modificar(event.row);
+      this.cargarForm(event.row);
       console.log(event.row);
+      this.changeImage = false;
     }
   }
 
   borrar(id) {
     if(confirm("Estas seguro de querer borrarlo?")){
       this.productosService.deleteProducto(id).subscribe(() => {
-        this.traerProductos();
+        this.resetForm();
         this.openSnackBar("Se ha borrado correctamente");
       });
     }
   }
 
   resetForm() {
-    //this.claseLabel=""; // quita la clase="active" de los labels
     this.myForm.reset();
    // this.prepareForm();
     this.traerProductos();
+    this.imagenSeleccionada = 'placeholder-image.png';
+    this.changeImage = false;
   }
 
   traerCategorias(){
@@ -187,13 +208,17 @@ export class ProductosComponent implements OnInit {
 
   openSnackBar(mensaje:string) {
     this._snackBar.open(mensaje,"", {
-      duration: 2000,
-      horizontalPosition: "center",
-      verticalPosition: "bottom"
+      duration: this.configSnackBar.duration,
+      horizontalPosition: this.configSnackBar.x,
+      verticalPosition: this.configSnackBar.y
     });
   }
 
  
+  // cambiarImagen(event){
+  //   console.log("event: ", event.target.files[0].name);
+  //   this.imagenSeleccionada = event.target.files[0].name;
+  // }
 
 
 } /*class*/

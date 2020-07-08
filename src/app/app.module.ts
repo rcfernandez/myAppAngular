@@ -26,6 +26,7 @@ import { MaterialModule } from "./modules/material/material.module";
 import { FooterComponent } from './shared/footer/footer.component';
 
 import { FileUploadModule  } from "ng2-file-upload";
+import { SubcategoriasComponent } from './pages/subcategorias/subcategorias.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { FileUploadModule  } from "ng2-file-upload";
     VentasComponent,
     MaterialTableComponent,
     DatatablaComponent,
-    FooterComponent
+    FooterComponent,
+    SubcategoriasComponent
   ],
   imports: [
     BrowserModule,

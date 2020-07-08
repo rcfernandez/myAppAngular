@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <h1 class="titulo">Categorias</h1>
+    <h1 class="titulo">Subcategorias</h1>
   </div>
 
   <div class="row">
@@ -9,13 +9,20 @@
         <form class="example-form" [formGroup]="myForm">
           <img
             mat-card-image
-            src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+            src="https://material.angular.io/assets/img/examples/shiba1.jpg"
             alt="Photo of a Shiba Inu"
           />
 
+          <!--categoria select-->
+          <select (change)="capturaEvento($event)">
+            <option *ngFor="let item of categorias" [value]="item._id">{{
+              item.descripcion
+            }}</option>
+          </select>
+
           <!-- id -->
           <mat-form-field class="example-full-width">
-            <mat-label>ID</mat-label>
+            <mat-label>ID Subcategoria</mat-label>
             <input
               matInput
               formControlName="_id"
@@ -26,29 +33,19 @@
 
           <!-- descripcion - oblig -->
           <mat-form-field class="example-full-width">
-            <mat-label>Descripción de categoría</mat-label>
+            <mat-label>Subcategoria</mat-label>
             <input
               matInput
               formControlName="descripcion"
               [(ngModel)]="categoriasService.selectedCategoria.descripcion"
             />
-            <mat-error
-              *ngIf="
-                myForm.get('descripcion').hasError('required') &&
-                myForm.get('descripcion').dirty
-              "
-            >
+            <mat-error *ngIf="myForm.get('descripcion').hasError('required') && myForm.get('descripcion').dirty">
               El campo es <strong>Requerido</strong>
             </mat-error>
           </mat-form-field>
 
           <mat-card-actions>
-            <button
-              mat-raised-button
-              color="primary"
-              [disabled]="myForm.invalid"
-              (click)="altaCategoria()"
-            >
+            <button mat-raised-button color="primary" (click)="altaSubCategoria()" [disabled]="myForm.invalid">
               Guardar
             </button>
             <button mat-button (click)="resetForm()">Limpiar</button>
@@ -60,19 +57,19 @@
     <div class="col-md-9 col-der-cat">
       <ngx-datatable
         class="material"
-        [rows]="dato.docs"
+        [rows]="subcategorias"
         [headerHeight]="50"
         [footerHeight]="50"
         rowHeight="auto"
         columnMode="force"
-        [externalPaging]="true"
-        [count]="dato.totalDocs"
-        [limit]="dato.limit"
-        (page)="setPage($event)"
-        (activate)="modificar($event)"
+        [count]="cantidadSubcategorias"
       >
-        <ngx-datatable-column name="Imagen" prop="id">
-          <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
+        <ngx-datatable-column name="Imagen" prop="img">
+          <ng-template
+            let-row="rows"
+            let-value="value"
+            ngx-datatable-cell-template
+          >
             <img
               class="img-thumbnail"
               style="height: auto; width: 100px;"
@@ -88,15 +85,17 @@
           [prop]="col.prop"
         ></ngx-datatable-column>
 
-        <ngx-datatable-column name="Acciones" prop="id">
-          <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>
-            <a class="waves-effect waves-light btn"
-              ><i class="material-icons">edit</i></a
-            >
-            <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a
-            >
+        <ngx-datatable-column name="id" prop="id">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <a (click)='modificar(row)' class="waves-effect waves-light btn">
+              <i class="material-icons">edit</i>
+            </a>
+            <a (click)='borrar(row)' class="waves-effect waves-light btn red darken-3">
+              <i class="material-icons">delete</i>
+            </a>
           </ng-template>
         </ngx-datatable-column>
+
       </ngx-datatable>
     </div>
   </div>

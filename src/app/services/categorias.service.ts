@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
-import { Categoria } from '../models/categoria.model';
+import { Categoria, Subcategoria } from '../models/categoria.model';
+import { SubcategoriasComponent } from '../pages/subcategorias/subcategorias.component';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class CategoriasService {
   selectedCategoria: Categoria;
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClient
     ) {
       this.selectedCategoria = new Categoria();
     }
@@ -45,4 +46,18 @@ export class CategoriasService {
   borrarCategoria(id) {
     return this.http.delete(environment.urlApi +'/categorias/'+ id);
   }
+
+  altaSubCategoria(idCategoria, data){
+    return this.http.put(environment.urlApi +'/categorias/altasubcategoria/' + idCategoria, data);
+  }
+
+  modificarSubCategoria(idCategoria, data){
+    return this.http.put(environment.urlApi +'/categorias/modificarsubcategoria/' + idCategoria, data);
+  }
+
+  borrarSubcategoria(idCategoria: String, data) {
+    return this.http.put(environment.urlApi +'/categorias/borrarsubcategoria/'+ idCategoria, data);
+  }
+  
+
 }

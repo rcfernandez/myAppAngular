@@ -10,6 +10,7 @@ import { CategoriasComponent } from './pages/categorias/categorias.component';
 import { TableListComponent } from './components/table-list/table-list.component';
 import { VentasComponent } from './pages/ventas/ventas.component';
 import { DatatablaComponent } from './components/datatabla/datatabla.component';
+import { SubcategoriasComponent } from './pages/subcategorias/subcategorias.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'usuarios', component: UsuarioComponent },
   { path: 'productos', component: ProductosComponent },  
   { path: 'categorias', component: CategoriasComponent },
+  { path: 'subcategorias', component: SubcategoriasComponent },
   { path: 'ventas', component: VentasComponent },
   { path: 'table-list', component: TableListComponent },
   { path: 'DatatablaComponent', component: DatatablaComponent },
