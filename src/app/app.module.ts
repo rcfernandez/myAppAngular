@@ -28,6 +28,10 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { FileUploadModule  } from "ng2-file-upload";
 import { SubcategoriasComponent } from './pages/subcategorias/subcategorias.component';
 
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +59,8 @@ import { SubcategoriasComponent } from './pages/subcategorias/subcategorias.comp
     BrowserAnimationsModule,
     NgxDatatableModule,
     MaterialModule,
-    FileUploadModule
+    FileUploadModule,
+    NgxMatFileInputModule
   ],
   providers: [],
   bootstrap: [

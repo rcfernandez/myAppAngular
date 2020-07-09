@@ -12,6 +12,10 @@ import { Producto } from 'src/app/models/producto.model';
 export class HomeComponent implements OnInit {
   productos: Producto[];
 
+  titulo = "Destacados";
+  subtitulo = "Aqui puede ver los productos destacados";
+  pathImage = "http://localhost:3000/images/productos/";
+
   constructor(
     private productosService: ProductosService
     ) {

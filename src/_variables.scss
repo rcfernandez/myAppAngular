@@ -1,10 +1,14 @@
 
-$sombreado-navbar: 0px 7px 13px -6px rgba(51,51,51,1);
-
-$sombreado-fuerte: 0px 7px 13px -6px rgba(51,51,51,1);
-
-$sombreado-medio: 0px 0px 18px 2px rgba(36,36,36,0.46);
-
-
+// titulos
 $titulo-color: black;
 $titulo-padding: 20px ;
+
+// sombreados
+$sombreado-navbar: 0px 7px 13px -6px rgba(51,51,51,1) !important;
+$sombreado-fuerte: 0px 7px 13px -6px rgba(51,51,51,1) !important;
+$sombreado-medio: 0px 0px 18px 2px rgba(36,36,36,0.46) !important;
+
+$sombreado-card: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+
+
+

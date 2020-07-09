@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/productos.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CategoriasService } from '../../services/categorias.service';
 import { Producto, Imagen } from '../../models/producto.model';
 import { Categoria } from 'src/app/models/categoria.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dato } from 'src/app/models/dato.model';
 import { FileUploader } from 'ng2-file-upload';
+
 
 //define the constant url we would be uploading to.
 const URL = "http://localhost:3000/productos/upload"
@@ -18,18 +19,14 @@ const URL = "http://localhost:3000/productos/upload"
 })
 
 export class ProductosComponent implements OnInit {
+
+  titulo = "Productos"
+  subtitulo = "Aca pueden cargar los datos de los productos"
   
   myForm: FormGroup;
   productos: Producto[];
   categorias: Categoria[];
   
-  //Instanciar uploader
-  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: "photo" });
-  
-  //imagen:Array<any>=[];
-  imagenSeleccionada = "placeholder-image.png"
-  changeImage: Boolean = false;
-
   dato: Dato;
   columns=[];
 
@@ -38,6 +35,14 @@ export class ProductosComponent implements OnInit {
     x: "right" as any,
     y: "top" as any
   }
+  
+  //Instanciar uploader
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: "photo" });
+  //imagen:Array<any>=[];
+  imagenSeleccionada = "placeholder-image.png"
+  changeImage: Boolean = false;
+  pathImage = "http://localhost:3000/images/productos/"
+
 
   constructor(
     public productosService: ProductosService,
@@ -53,8 +58,6 @@ export class ProductosComponent implements OnInit {
   ngOnInit(): void {
     this.traerProductos();    
     this.setPage({ offset: 0 }); //SetPage en base a una pagina consulta productos a express
-   
-
   }
 
   prepareForm(){
@@ -62,11 +65,11 @@ export class ProductosComponent implements OnInit {
       _id: [''],
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
-      precio: [0],
-      cantidad: [0],
+      precio: [''],
+      cantidad: [''],
       categoria: [''],
-      destacado: ['0'],
-      imagen:['']
+      destacado: [''],
+      imagen:[''],
     });
   }
 
@@ -107,15 +110,12 @@ export class ProductosComponent implements OnInit {
         let json = JSON.parse(response);
         console.log("json data: ", json["data"]);
         this.myForm.get('imagen').setValue(json["data"]);
-  
         
         this.guardar();
-  
       };
     }
     else {
       this.guardar();
-
     }
    
   }
@@ -124,24 +124,17 @@ export class ProductosComponent implements OnInit {
 
     if(this.myForm.controls["_id"].value){
       // modificacion
-
-      console.log("MODIFICAR this.myForm.value: ", this.myForm.value)
-
-      this.productosService.updateProducto(this.myForm.controls["_id"].value, this.myForm.value).subscribe((data) => {
+      this.productosService.updateProducto(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
       });
-      this.openSnackBar("Se ha modificado correctamente");
       this.resetForm();
+      this.openSnackBar("Se ha modificado correctamente");
     }
     // alta
     else{
-    console.log("CREAR this.myForm.value: ", this.myForm.value)
-
-      this.productosService.createProducto(this.myForm.value).subscribe((data) => {
-        console.log("Respuesta de CreateProducto: ", data);
+      this.productosService.createProducto(this.myForm.value).subscribe(() => {
       });
-    // this.resetForm();
+      this.resetForm();
       this.openSnackBar("Se ha generado correctamente");
-      this.resetForm()
     }
 
   }
@@ -153,7 +146,7 @@ export class ProductosComponent implements OnInit {
       _id: [producto._id],
       nombre: [producto.nombre, Validators.required],
       descripcion: [producto.descripcion, Validators.required],
-      precio: [producto.precio, Validators.required],
+      precio: [producto.precio],
       cantidad: [producto.cantidad],
       categoria: [producto.categoria._id],
       destacado: [producto.destacado],
@@ -180,11 +173,10 @@ export class ProductosComponent implements OnInit {
   }
 
   resetForm() {
-    this.myForm.reset();
-   // this.prepareForm();
-    this.traerProductos();
     this.imagenSeleccionada = 'placeholder-image.png';
     this.changeImage = false;
+    this.myForm.reset();
+    this.traerProductos();
   }
 
   traerCategorias(){
@@ -196,8 +188,7 @@ export class ProductosComponent implements OnInit {
   setPage(pageInfo){
     this.productosService.getProductosPaginado(pageInfo).subscribe( (data) =>{
       
-      //Registros de productos (Informacion)
-      this.productos= data['docs'] as Producto[];
+      //this.productos= data['docs'] as Producto[];
       this.dato = data as Dato;
 
       //La pagina que estoy consultando
@@ -213,12 +204,6 @@ export class ProductosComponent implements OnInit {
       verticalPosition: this.configSnackBar.y
     });
   }
-
- 
-  // cambiarImagen(event){
-  //   console.log("event: ", event.target.files[0].name);
-  //   this.imagenSeleccionada = event.target.files[0].name;
-  // }
 
 
 } /*class*/

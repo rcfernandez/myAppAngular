@@ -1,23 +1,5 @@
 @import "../../../variables";
 
-.titulo{
-    color: $titulo-color;
-}
-
-.card-avatar-img {
-    object-fit: cover;
-    
-    img {
-        width: 80%;
-    }
-}
-
-
-.ngx-datatable.material{
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-    margin: 8px 0 0 0;
-    border-radius: 3px;
-}
 
 
 .example-form {
@@ -27,10 +9,7 @@
 }
 
 .example-full-width {
-width: 100%;
-height: 75px;
+    width: 100%;
+    height: 75px;
 }
 
-.image-upload>input {
-    display: none;
-  }

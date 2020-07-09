@@ -45,7 +45,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
     MatSnackBarModule,
     MatDialogModule,
     MatGridListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   exports: [
     MatToolbarModule,

@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./variables";
 
 html,
 body {
@@ -10,21 +11,26 @@ body {
   padding: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #F5F5F5;
-
-}
-
-.titulo{
-  padding: 20px;
 }
 
 
-.ngx-datatable.material{
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  margin: 8px 0 0 0;
-  border-radius: 3px;
+
+
+// titulos de las paginas
+.titulo h1{
+  padding: 50px 10px 0px 10px;
+  font-weight: 300;
+  font-size: 38px;
+
 }
 
+.subtitulo h3 {
+  padding: 0 10px 0px 10px;
+  color: gray;
+  font-weight: 200;
+}
 
+//FORMS
 .example-form {
   min-width: 150px;
   max-width: 500px;
@@ -32,6 +38,94 @@ body {
 }
 
 .example-full-width {
-width: 100%;
-height: 75px;
+  width: 100%;
+  height: 75px;
+}
+
+
+
+// INPUT FILE
+input[type="file"] {
+  //border: 1px solid #b5bcc7;
+  width: 220px;
+  vertical-align: middle;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  direction: unset;
+}
+
+//IMG CARD
+img.mat-card-image {
+  height: 165px;
+  object-fit: cover;
+}
+
+// AVATAR TABLE IMG
+.table-avatar-img{
+  height: 70px;
+  width: 80px;
+  object-fit: cover;
+}
+
+// NGX DATATABLE
+.ngx-datatable.material{
+  box-shadow:  $sombreado-card;
+  border-radius: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// PADDING Y
+.py-1{
+  padding: 10px 0;
+}
+
+.py-2{
+  padding: 20px 0;
+}
+
+.py-3{
+  padding: 30px 0;
+}
+
+.py-4{
+  padding: 40px 0;
+}
+
+.py-5{
+  padding: 50px 0;
+}
+
+//PADDING X
+.px-1{
+  padding: 0 10px;
+}
+
+.px-2{
+  padding: 0 20px;
+}
+
+.px-3{
+  padding: 0 30px;
+}
+
+.px-4{
+  padding: 0 40px;
+}
+
+.px-5{
+  padding: 0 50px;
 }

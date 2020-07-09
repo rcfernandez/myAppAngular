@@ -1,15 +1,22 @@
 <div class="container">
 
   <div class="row">
-    <h1 class="titulo">Destacados</h1>
+    <div class="col-md-12 titulo">
+      <h1>{{titulo}}</h1>
+    </div>
+    <div class="col-md-12 subtitulo">
+      <h3>{{subtitulo}}</h3>
+    </div>
   </div>
+    
+  <mat-divider></mat-divider>
 
-  <div class="row">
+  <div class="row py-4">
 
     <div class="col-md-3" *ngFor="let producto of productos">
       <mat-card class="example-card" >
          
-        <img mat-card-image src="https://picsum.photos/300/300" alt="Photo of a Shiba Inu">
+        <img mat-card-image src="{{pathImage}}{{producto.imagen.filename}}" alt="{{producto.imagen.originalname}}">
         
         <mat-card-header>
           <mat-card-title>{{ producto.nombre }}</mat-card-title>
@@ -24,7 +31,7 @@
           <mat-card-subtitle>Stock: {{ producto.cantidad }}</mat-card-subtitle>
         </mat-card-content>
         
-        <mat-card-actions>
+        <mat-card-actions align="center">
           <button mat-button color="primary">Comprar</button>
           <button mat-button>Me gusta</button>
         </mat-card-actions>
