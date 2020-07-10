@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/productos.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CategoriasService } from '../../services/categorias.service';
-import { Producto, Imagen } from '../../models/producto.model';
+import { Producto } from '../../models/producto.model';
 import { Categoria } from 'src/app/models/categoria.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dato } from 'src/app/models/dato.model';
@@ -59,7 +59,9 @@ export class ProductosComponent implements OnInit {
       _id: [''],
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
+      sku: ['', Validators.required],
       precio: [''],
+      oferta: [''],
       cantidad: [''],
       categoria: [''],
       destacado: [''],
@@ -71,7 +73,9 @@ export class ProductosComponent implements OnInit {
     this.columns=[
       { name:'Nombre', prop:'nombre' },
       { name:'Descripcion',prop:'descripcion' },
+      { name:'SKU',prop:'sku' },
       { name:'Precio', prop:'precio' }, 
+      { name:'Oferta', prop:'oferta' }, 
       { name:'Cantidad',prop:'cantidad' }, 
       { name:'Categoria',prop:'categoria.descripcion' },
       { name:'Destacado',prop:'destacado' }, 
@@ -96,7 +100,9 @@ export class ProductosComponent implements OnInit {
       _id: [producto._id],
       nombre: [producto.nombre, Validators.required],
       descripcion: [producto.descripcion, Validators.required],
+      sku: [producto.sku, Validators.required],
       precio: [producto.precio],
+      oferta: [producto.oferta],
       cantidad: [producto.cantidad],
       categoria: [producto.categoria._id],
       destacado: [producto.destacado],
@@ -106,9 +112,9 @@ export class ProductosComponent implements OnInit {
   }
 
   resetForm() {
+    this.myForm.reset();
     this.imagenSeleccionada = 'placeholder-image.png';
     this.changeImage = false;
-    this.myForm.reset();
     this.traerProductosPaginado();
   }
 
@@ -140,6 +146,7 @@ export class ProductosComponent implements OnInit {
   }
 
   alta() {
+    // agrega imagen
     if(this.changeImage){
       this.uploader.uploadAll();
       this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
@@ -148,8 +155,11 @@ export class ProductosComponent implements OnInit {
         this.guardar();
       };
     }
+    // no agrega imagen
     else {
       this.guardar();
+      console.log(`paso sin guardar imagen`);
+
     }
   }
 

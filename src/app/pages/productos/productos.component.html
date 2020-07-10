@@ -47,6 +47,15 @@
               El campo es <strong>Requerido</strong>
             </mat-error>
           </mat-form-field>
+          
+          <!-- sku - oblig -->
+          <mat-form-field class="example-full-width">
+            <mat-label>SKU</mat-label>
+            <input matInput formControlName="sku">
+            <mat-error *ngIf="myForm.get('sku').hasError('required') && myForm.get('sku').dirty">
+              El campo es <strong>Requerido</strong>
+            </mat-error>
+          </mat-form-field>
 
           <!-- categoria -->
           <mat-form-field class="example-full-width" >
@@ -60,6 +69,13 @@
           <mat-form-field class="example-full-width">
             <mat-label>Precio</mat-label>
             <input type="number" matInput formControlName="precio" >
+            <mat-icon matSuffix>attach_money</mat-icon>
+          </mat-form-field>
+
+          <!-- oferta -->
+          <mat-form-field class="example-full-width">
+            <mat-label>Oferta</mat-label>
+            <input type="number" matInput formControlName="oferta" >
             <mat-icon matSuffix>attach_money</mat-icon>
           </mat-form-field>
 
@@ -119,7 +135,7 @@
           <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop"></ngx-datatable-column>
       
           <ngx-datatable-column name="Eliminar" prop="id" >
-            <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template >
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
               <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
             </ng-template>  
           </ngx-datatable-column>

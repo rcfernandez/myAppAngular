@@ -1,19 +1,12 @@
-export interface Imagen {
-  fieldname: string,
-  originalname: string,
-  encoding: string,
-  mimetype: string,
-  destination: string,
-  filename: string,
-  path: string,
-  size: string,
-}
+import { Imagen } from './imagen.model';
 
 export class Producto {
   _id: string;
   nombre: string;
   descripcion: string;
+  sku: string;
   precio: number;
+  oferta: number;
   cantidad: number;
   categoria: any;
   destacado: number;
@@ -23,7 +16,9 @@ export class Producto {
     id = '',
     nombre = '',
     descripcion = '',
+    sku = '',
     precio = 0,
+    oferta = 0,
     cantidad = 0,
     categoria = {},
     destacado = 0,
@@ -32,7 +27,9 @@ export class Producto {
     this._id = id;
     this.nombre = nombre;
     this.descripcion = descripcion;
+    this.sku = sku;
     this.precio = precio;
+    this.oferta = oferta;
     this.cantidad = cantidad;
     this.categoria = categoria;
     this.destacado = destacado;
