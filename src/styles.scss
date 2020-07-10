@@ -14,7 +14,10 @@ body {
 }
 
 
-
+// FIX DROPDOWNLIST navmenu
+.mat-menu-panel, #mat-menu-panel-0 {
+  overflow-x: hidden  !important;
+}
 
 // titulos de las paginas
 .titulo h1{
@@ -54,9 +57,14 @@ input[type="file"] {
   direction: unset;
 }
 
+//form productos: img
+.card-form-img{
+  height: 180px;
+  object-fit: cover;
+}
+
 //IMG CARD
-img.mat-card-image {
-  height: 165px;
+.card-home-img {
   object-fit: cover;
 }
 
@@ -73,6 +81,27 @@ img.mat-card-image {
   border-radius: 4px;
 }
 
+// tablas de productos, categoria, etc
+.datatable-data-prod {
+  
+  //encabezados
+  .datatable-header-cell {
+    text-align: center !important;
+  }
+
+  // precio
+  .datatable-body-cell:nth-child(4){
+    text-align: right !important;
+  }
+
+  // los demas
+  .datatable-body-cell:nth-child(5),
+  .datatable-body-cell:nth-child(7),
+  .datatable-body-cell:nth-child(8) {
+    text-align: center !important;
+  }
+
+}
 
 
 

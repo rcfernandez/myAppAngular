@@ -21,7 +21,7 @@
         <form class="example-form" [formGroup]="myForm">
 
           <!-- imagen -->
-          <img mat-card-image src="{{pathImage}}{{imagenSeleccionada}}" alt="Foto de producto">
+          <img mat-card-image class="card-form-img" src="{{pathImage}}{{imagenSeleccionada}}">
       
           <!-- id - readonly -->
           <mat-form-field class="example-full-width">
@@ -41,7 +41,7 @@
 
           <!-- descripcion - oblig -->
           <mat-form-field class="example-full-width">
-            <mat-label>Descripcion</mat-label>
+            <mat-label>Descripción</mat-label>
             <input matInput formControlName="descripcion">
             <mat-error *ngIf="myForm.get('descripcion').hasError('required') && myForm.get('descripcion').dirty">
               El campo es <strong>Requerido</strong>
@@ -50,7 +50,7 @@
 
           <!-- categoria -->
           <mat-form-field class="example-full-width" >
-            <mat-label>Categoria</mat-label>
+            <mat-label>Categoría</mat-label>
             <mat-select formControlName="categoria">
               <mat-option *ngFor="let item of categorias" [value]="item._id" >{{ item.descripcion }}</mat-option>
             </mat-select>
@@ -76,9 +76,7 @@
           <mat-form-field class="example-full-width">
             <input type="number" matInput formControlName="destacado" hidden>
             <mat-slide-toggle input type="number" formControlName="destacado" [(ngModel)]="productosService.selectedProducto.destacado"
-              class="example-margin"
-              [color]="'primary'"
-              [checked]="'true'" >
+              class="example-margin" [color]="'primary'" [checked]="'true'" >
               Destacado
             </mat-slide-toggle>
           </mat-form-field>
@@ -86,7 +84,7 @@
           <!-- acciones -->
           <mat-card-actions align="center">
             <button mat-raised-button color="primary" [disabled]="myForm.invalid" (click)="alta()">Guardar</button>
-            <button mat-button (click)="resetForm()">Limpiar</button>
+            <button mat-stroked-button (click)="resetForm()">Limpiar</button>
           </mat-card-actions>
 
         </form>
@@ -99,7 +97,7 @@
     <div class="col-md-9">
          
       <ngx-datatable
-          class="material"
+          class="material datatable-data-prod"
           [rows]=dato.docs
           [headerHeight]="50"
           [footerHeight]="50"
@@ -114,11 +112,11 @@
           
           <ngx-datatable-column name="Imagen" prop="imagen">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <img class="table-avatar-img" src="{{pathImage}}{{row.imagen.filename}}" alt="Foto de producto"> 
+              <img class="table-avatar-img" src="{{pathImage}}{{row.imagen.filename}}"> 
             </ng-template>  
           </ngx-datatable-column>
 
-          <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+          <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop"></ngx-datatable-column>
       
           <ngx-datatable-column name="Eliminar" prop="id" >
             <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template >

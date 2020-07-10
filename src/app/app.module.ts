@@ -29,6 +29,7 @@ import { FileUploadModule  } from "ng2-file-upload";
 import { SubcategoriasComponent } from './pages/subcategorias/subcategorias.component';
 
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { DialogElementComponent } from './components/dialog-element/dialog-element.component';
 
 
 
@@ -48,7 +49,8 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     MaterialTableComponent,
     DatatablaComponent,
     FooterComponent,
-    SubcategoriasComponent
+    SubcategoriasComponent,
+    DialogElementComponent
   ],
   imports: [
     BrowserModule,

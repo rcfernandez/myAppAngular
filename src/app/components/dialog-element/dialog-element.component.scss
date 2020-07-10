@@ -1,0 +1,27 @@
+@import "../../../variables";
+
+
+
+// .card-left{
+//     width: 400px;
+//     object-fit: cover;
+// }
+
+// .mat-dialog-container {
+//     background-color: red !important;
+// }
+
+
+// .container{
+//     background-color: $color-background-1 ;
+// }
+
+
+.container{
+    width: 1000px;
+    height: 500px;
+
+    .card-left img{
+        height: 100%;
+    }
+}

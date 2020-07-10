@@ -8,8 +8,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dato } from 'src/app/models/dato.model';
 import { FileUploader } from 'ng2-file-upload';
 
-
-//define the constant url we would be uploading to.
 const URL = "http://localhost:3000/productos/upload"
 
 @Component({
@@ -22,14 +20,9 @@ export class ProductosComponent implements OnInit {
 
   titulo = "Productos"
   subtitulo = "Aca pueden cargar los datos de los productos"
-  
   myForm: FormGroup;
-  productos: Producto[];
-  categorias: Categoria[];
-  
   dato: Dato;
   columns=[];
-
   configSnackBar = {
     duration: 2000,
     x: "right" as any,
@@ -38,12 +31,13 @@ export class ProductosComponent implements OnInit {
   
   //Instanciar uploader
   public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: "photo" });
-  //imagen:Array<any>=[];
+  pathImage = "http://localhost:3000/images/productos/"
   imagenSeleccionada = "placeholder-image.png"
   changeImage: Boolean = false;
-  pathImage = "http://localhost:3000/images/productos/"
-
-
+  
+  productos: Producto[];
+  categorias: Categoria[];
+  
   constructor(
     public productosService: ProductosService,
     public categoriasService: CategoriasService,
@@ -56,7 +50,7 @@ export class ProductosComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.traerProductos();    
+    this.traerProductosPaginado();    
     this.setPage({ offset: 0 }); //SetPage en base a una pagina consulta productos a express
   }
 
@@ -84,64 +78,20 @@ export class ProductosComponent implements OnInit {
     ]
   }
 
-  traerProductos() {
-    this.productosService.getProductosPaginado().subscribe((data) => {
-      this.dato = data as Dato;
-    });
-  }
-
   onChange(event){
-
     if(event.type == 'change'){
       this.changeImage = true;
     }
-
   }
 
-  alta() {
-
-    if(this.changeImage){
-      
-      this.uploader.uploadAll();
-  
-      this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
-        
-        console.log("Imagen subida, item: ", item ,"status: ", status, "response: ", response);
-        let json = JSON.parse(response);
-        console.log("json data: ", json["data"]);
-        this.myForm.get('imagen').setValue(json["data"]);
-        
-        this.guardar();
-      };
+  onActivate(event) {
+    if(event.type == 'click') {
+      this.cargarForm(event.row);
+      this.changeImage = false;
     }
-    else {
-      this.guardar();
-    }
-   
   }
-
-  guardar(){
-
-    if(this.myForm.controls["_id"].value){
-      // modificacion
-      this.productosService.updateProducto(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
-      });
-      this.resetForm();
-      this.openSnackBar("Se ha modificado correctamente");
-    }
-    // alta
-    else{
-      this.productosService.createProducto(this.myForm.value).subscribe(() => {
-      });
-      this.resetForm();
-      this.openSnackBar("Se ha generado correctamente");
-    }
-
-  }
-
 
   cargarForm(producto: Producto) {
-    //this.productosService.selectedProducto = producto;
     this.myForm = this.fb.group({
       _id: [producto._id],
       nombre: [producto.nombre, Validators.required],
@@ -155,11 +105,67 @@ export class ProductosComponent implements OnInit {
     this.imagenSeleccionada = producto.imagen.filename;
   }
 
-  onActivate(event) {
-    if(event.type == 'click') {
-      this.cargarForm(event.row);
-      console.log(event.row);
-      this.changeImage = false;
+  resetForm() {
+    this.imagenSeleccionada = 'placeholder-image.png';
+    this.changeImage = false;
+    this.myForm.reset();
+    this.traerProductosPaginado();
+  }
+
+  setPage(pageInfo){
+    this.productosService.getProductosPaginado(pageInfo).subscribe( data =>{
+      this.dato = data as Dato;
+      this.dato.page = pageInfo["offset"];
+    })
+  }
+
+  openSnackBar(mensaje:string) {
+    this._snackBar.open(mensaje,"", {
+      duration: this.configSnackBar.duration,
+      horizontalPosition: this.configSnackBar.x,
+      verticalPosition: this.configSnackBar.y
+    });
+  }
+
+  traerProductosPaginado() {
+    this.productosService.getProductosPaginado().subscribe((data) => {
+      this.dato = data as Dato;
+    });
+  }
+
+  traerCategorias(){
+    this.categoriasService.getCategorias().subscribe((data) => {
+      this.categorias = data as Categoria[];
+    });
+  }
+
+  alta() {
+    if(this.changeImage){
+      this.uploader.uploadAll();
+      this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
+        let json = JSON.parse(response);
+        this.myForm.get('imagen').setValue(json["data"]);
+        this.guardar();
+      };
+    }
+    else {
+      this.guardar();
+    }
+  }
+
+  guardar(){
+    if(this.myForm.controls["_id"].value){
+      // modificacion
+      this.productosService.updateProducto(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
+      });
+      this.resetForm();
+      this.openSnackBar("Se ha modificado correctamente");
+    }
+    // alta
+    else{
+      this.productosService.createProducto(this.myForm.value).subscribe(() => {} );
+      this.resetForm();
+      this.openSnackBar("Se ha generado correctamente");
     }
   }
 
@@ -172,38 +178,6 @@ export class ProductosComponent implements OnInit {
     }
   }
 
-  resetForm() {
-    this.imagenSeleccionada = 'placeholder-image.png';
-    this.changeImage = false;
-    this.myForm.reset();
-    this.traerProductos();
-  }
-
-  traerCategorias(){
-    this.categoriasService.getCategorias().subscribe((data) => {
-      this.categorias = data as Categoria[];
-    });
-  }
-
-  setPage(pageInfo){
-    this.productosService.getProductosPaginado(pageInfo).subscribe( (data) =>{
-      
-      //this.productos= data['docs'] as Producto[];
-      this.dato = data as Dato;
-
-      //La pagina que estoy consultando
-      this.dato.page = pageInfo["offset"];
-      console.log("pageInfo: ", pageInfo);
-    })
-  }
-
-  openSnackBar(mensaje:string) {
-    this._snackBar.open(mensaje,"", {
-      duration: this.configSnackBar.duration,
-      horizontalPosition: this.configSnackBar.x,
-      verticalPosition: this.configSnackBar.y
-    });
-  }
 
 
 } /*class*/

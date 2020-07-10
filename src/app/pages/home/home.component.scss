@@ -1,5 +1,6 @@
 @import "../../../variables";
 
+
 .example-card {
     max-width: 300px;
     margin-bottom: 50px;;
@@ -19,3 +20,18 @@
     background-size: cover;
 
   }
+
+  .gallery {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    
+    .gallery-li{
+       display: -webkit-flex;
+       display: flex;
+    }
+
+
+ }
+ 

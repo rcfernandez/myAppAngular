@@ -7,3 +7,7 @@ button {
 mat-toolbar{
   box-shadow: $sombreado-navbar;
 }
+
+.mat-menu-panel, #mat-menu-panel-0 {
+  overflow: hidden !important;
+}
