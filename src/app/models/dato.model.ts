@@ -1,5 +1,5 @@
 export class Dato {
-    docs: any[];
+    docs: Array<any>;
     totalDocs: number;
     limit: number;
     totalPages: number;
@@ -11,16 +11,16 @@ export class Dato {
     nextPage: number;
 
     constructor(
-        docs: [],
-        totalDocs: 0,
-        limit: 0,
-        totalPages: 0,
-        page: 0,
-        pagingCounter: 0,
-        hasPrevPage: false,
-        hasNextPage: false,
-        prevPage: 0,
-        nextPage: 0
+        docs = [],
+        totalDocs = 0,
+        limit = 0,
+        totalPages = 0,
+        page = 0,
+        pagingCounter = 0,
+        hasPrevPage = false,
+        hasNextPage = false,
+        prevPage = 0,
+        nextPage = 0
         ) {
             this.docs = docs;
             this.totalDocs = totalDocs;

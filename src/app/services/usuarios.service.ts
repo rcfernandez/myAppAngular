@@ -11,7 +11,9 @@ export class UsuariosService {
 
   selectedUsuario: Usuario;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient
+    ) {
     this.selectedUsuario = new Usuario();
   }
 
@@ -36,13 +38,14 @@ export class UsuariosService {
     return this.http.post(environment.urlApi +'/usuarios/', data);
   }
 
+  modificarUsuario(id, data) {
+    return this.http.put(environment.urlApi +'/usuarios/'+ id, data);
+  }
+  
   borrarUsuario(id) {
     return this.http.delete(environment.urlApi +'/usuarios/'+ id);
   }
 
-  modificarUsuario(id, data) {
-    return this.http.put(environment.urlApi +'/usuarios/'+ id, data);
-  }
 
 
 }

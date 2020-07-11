@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
-import { Categoria, Subcategoria } from '../models/categoria.model';
-import { SubcategoriasComponent } from '../pages/subcategorias/subcategorias.component';
+import { Categoria } from '../models/categoria.model';
+
 
 @Injectable({
   providedIn: 'root',

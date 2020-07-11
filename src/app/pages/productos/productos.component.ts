@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/productos.service';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoriasService } from '../../services/categorias.service';
 import { Producto } from '../../models/producto.model';
 import { Categoria } from 'src/app/models/categoria.model';
@@ -8,14 +8,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dato } from 'src/app/models/dato.model';
 import { FileUploader } from 'ng2-file-upload';
 
-const URL = "http://localhost:3000/productos/upload"
+const UrlUpload = "http://localhost:3000/productos/upload"
+const pathImage = "http://localhost:3000/images/productos/"
 
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.scss'],
 })
-
 export class ProductosComponent implements OnInit {
 
   titulo = "Productos"
@@ -23,15 +23,11 @@ export class ProductosComponent implements OnInit {
   myForm: FormGroup;
   dato: Dato;
   columns=[];
-  configSnackBar = {
-    duration: 2000,
-    x: "right" as any,
-    y: "top" as any
-  }
+  configSnackBar = { duration: 2000, x: "right" as any, y: "top" as any }
   
   //Instanciar uploader
-  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: "photo" });
-  pathImage = "http://localhost:3000/images/productos/"
+  public uploader: FileUploader = new FileUploader({ url: UrlUpload, itemAlias: "photo" });
+  pathImage = pathImage;
   imagenSeleccionada = "placeholder-image.png"
   changeImage: Boolean = false;
   
@@ -52,7 +48,7 @@ export class ProductosComponent implements OnInit {
   ngOnInit(): void {
     this.traerProductosPaginado();    
     this.setPage({ offset: 0 }); //SetPage en base a una pagina consulta productos a express
-  }
+  }    
 
   prepareForm(){
     this.myForm = this.fb.group({
@@ -115,7 +111,8 @@ export class ProductosComponent implements OnInit {
     this.myForm.reset();
     this.imagenSeleccionada = 'placeholder-image.png';
     this.changeImage = false;
-    this.traerProductosPaginado();
+    //this.traerProductosPaginado();
+    this.setPage(this.dato.page)
   }
 
   setPage(pageInfo){
@@ -134,8 +131,8 @@ export class ProductosComponent implements OnInit {
   }
 
   traerProductosPaginado() {
-    this.productosService.getProductosPaginado().subscribe((data) => {
-      this.dato = data as Dato;
+    this.productosService.getProductosPaginado().subscribe( res => {
+      this.dato = res["data"] as Dato;
     });
   }
 
@@ -158,8 +155,6 @@ export class ProductosComponent implements OnInit {
     // no agrega imagen
     else {
       this.guardar();
-      console.log(`paso sin guardar imagen`);
-
     }
   }
 
