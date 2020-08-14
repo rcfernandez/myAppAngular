@@ -1,58 +1,53 @@
-<!-- <mat-card class="example-card" >
-         
-    <img mat-card-image src="{{pathImage}}{{data.imagen.filename}}" alt="{{data.imagen.originalname}}">
-    
-    <mat-card-header>
-      <mat-card-title>{{ data.nombre }}</mat-card-title>
-    </mat-card-header>
-      
-    <mat-card-content>
-      <p>{{ data.descripcion }}</p>
-      <p>Precio: {{ data.precio }}</p>
-      <mat-card-subtitle>Categoria: {{ data.categoria.descripcion }}</mat-card-subtitle>
-      <mat-card-subtitle>Stock: {{ data.cantidad }}</mat-card-subtitle>
-    </mat-card-content>
-    
-    <mat-card-actions align="center">
-      <button mat-button color="primary">Comprar</button>
-      <button mat-button>Me gusta</button>
-    </mat-card-actions>
-
-  </mat-card> -->
-
 <div class="container">
-  <div class="row">
 
-    <div class="col-md-6 col-left">
-      <mat-card class="card-left">
-        <img mat-card-image src="{{ pathImage }}{{ data.imagen.filename }}" alt="{{ data.imagen.originalname }}" />
-      </mat-card>
-    </div>
+   <div class="row">
 
-    <div class="col-md-6">
-      <mat-card class="example-card"> 
+      <div class="col-md-6 col-left">
 
-        <mat-card-header>
-          <mat-card-title>{{ data.nombre }}</mat-card-title>
-        </mat-card-header>
-          
-        <mat-card-content>
-          <p>{{ data.descripcion }}</p>
-          <p>Precio: {{ data.precio }}</p>
-          <mat-card-subtitle>Categoria: {{ data.categoria.descripcion }}</mat-card-subtitle>
-          <mat-card-subtitle>Stock: {{ data.cantidad }}</mat-card-subtitle>
-          <mat-card-subtitle>SKU: {{ data.sku }}</mat-card-subtitle>
-        </mat-card-content>
-        
-        <mat-card-actions align="center">
-          <button mat-button color="primary">Comprar</button>
-          <button mat-button>Me gusta</button>
-        </mat-card-actions>
+         <mat-card class="card-left">
+            <img
+               mat-card-image
+               src="{{ pathImage }}{{ data.imagen.filename }}"
+               alt="{{ data.imagen.originalname }}"
+            />
+         </mat-card>
 
-      </mat-card>
-    </div>
+      </div>
 
+      <div class="col-md-6">
 
+         <mat-card class="example-card">
+            <mat-card-header>
+               <mat-card-title>{{ data.nombre }}</mat-card-title>
+            </mat-card-header>
 
-  </div>  <!--row-->
-</div><!--container-->
+            <mat-card-content>
+               <p>{{ data.descripcion }}</p>
+               <p>Precio: {{ data.precio }}</p>
+               <mat-card-subtitle
+                  >Categoria:
+                  {{ data.categoria.descripcion }}</mat-card-subtitle
+               >
+               <mat-card-subtitle>Stock: {{ data.cantidad }}</mat-card-subtitle>
+               <mat-card-subtitle>SKU: {{ data.sku }}</mat-card-subtitle>
+            </mat-card-content>
+
+            <mat-card-actions align="center">
+               <button
+                  mat-button
+                  color="primary"
+                  [routerLink]="['/checkout', data._id]"
+               >
+                  Comprar
+               </button>
+               <button mat-button>Me gusta</button>
+            </mat-card-actions>
+
+         </mat-card>
+
+      </div>
+
+   </div>
+   <!--row-->
+</div>
+<!--container-->

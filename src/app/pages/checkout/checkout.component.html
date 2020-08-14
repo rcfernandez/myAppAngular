@@ -1,0 +1,175 @@
+<section>
+
+   <app-titulo titulo="Checkout" subtitulo="Verifica que los datos sean correctos"></app-titulo>
+
+    <article class="row py-5">
+
+        <mat-horizontal-stepper class="form-checkout" style="width: 100%;" #stepper>
+
+            <!-- form uno -->
+            <mat-step [stepControl]="cantidadTotalForm" errorMessage="Hay campos con errores">
+
+                <div class="row py-2">
+
+                    <div class="col-md-6">
+
+                        <h2 class="py-1">Tus Datos</h2>
+
+                        <div class="col-md-12" style="text-align: center;">
+                           <img *ngIf="usuario" mat-card-image class="card-form-img" src="{{pathImageUsuario}}{{usuario.imagen.filename}}">
+                        </div>
+
+
+                        <table *ngIf="usuario" class="tabla-usuario" style="width: 100%;">
+                            <tr>
+                                <td>Nombre</td>
+                                <td>{{ usuario.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <td>Apellido</td>
+                                <td>{{ usuario.apellido }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ usuario.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Telefono</td>
+                                <td>{{ usuario.telefono }}</td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <form  [formGroup]="cantidadTotalForm" *ngIf="usuario">
+                            <ng-template matStepLabel>Detalle de la compra</ng-template>
+
+                            <h2 class="py-1">Tu Pedido</h2>
+
+                            <!-- imagen -->
+                           <div class="col-md-12" style="text-align: center;">
+                              <img *ngIf="producto" mat-card-image class="card-form-img" src="{{pathImageProducto}}{{producto.imagen.filename}}">
+                           </div>
+
+                            <table class="tabla-pedido" style="width: 100%;">
+                                <tr class="color-celda-01">
+                                    <th style="width: 75%;">
+                                        Producto
+                                    </th>
+                                    <th style="width: 25%;">
+                                        Total
+                                    </th>
+                                </tr>
+                                <tr class="color-celda-02">
+                                    <td>
+                                        <p style="font-size: 16px;"><strong>{{ producto.nombre }}</strong></p>
+                                        <p>{{ producto.descripcion }}</p>
+                                        <p  style="color: gray;">{{ categoria?.descripcion }}</p>
+                                    </td>
+                                    <td style="vertical-align: top;">
+                                        <ng-container *ngIf="producto.oferta;else templateName">
+                                            <p style="text-align: center;">$ {{ producto.oferta }}</p>
+                                        </ng-container>
+                                        <ng-template #templateName>
+                                            <p style="text-align: center;">$ {{ producto.precio }}</p>
+                                        </ng-template>
+                                    </td>
+                                </tr>
+                                <tr class="color-celda-02">
+                                    <td>Cantidad</td>
+                                    <td>
+                                        <mat-form-field class="example-full-width">
+                                            <input type="number" matInput formControlName="cantidad" min="0" max="10" style="text-align: right;" >
+                                            <mat-error *ngIf="cantidadTotalForm.get('cantidad').hasError('min')">
+                                                La cantidad debe ser <strong>mayor a 1</strong>
+                                            </mat-error>
+                                            <mat-error *ngIf="cantidadTotalForm.get('cantidad').hasError('required')">
+                                                El campo es <strong>requerido</strong>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr class="color-celda-01">
+                                    <td style="font-size: 16px;"><strong>Total</strong></td>
+                                    <td>
+                                        <mat-form-field class="example-full-width">
+                                            <input type="number" matInput formControlName="total" readonly style="text-align: right; font-weight: 500;">
+                                            <mat-icon matSuffix>attach_money</mat-icon>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                        </form>
+
+                        <div class="form-btn-detalle">
+                            <!-- <p>Go to a different step to see the error state</p> -->
+                            <button mat-raised-button color="primary" matStepperNext [disabled]="cantidadTotalForm.invalid">Siguiente</button>
+                        </div>
+
+                    </div>
+
+
+                </div> <!-- row -->
+
+            </mat-step>
+
+
+            <!-- form dos -->
+            <mat-step [stepControl]="medioDePagoForm" errorMessage="Debes seleccionar un metodo de pago">
+
+               <form [formGroup]="medioDePagoForm" style="text-align: center;">
+
+                  <ng-template matStepLabel>Método de pago</ng-template>
+
+                  <h2 class="py-3">Total a pagar $ {{ ventaForm.get("total").value }}</h2>
+
+                  <label>Selecciona el medio de pago</label>
+
+                  <div class="col-md-2 offset-md-5 py-5">
+                     <mat-radio-group aria-labelledby="example-radio-group-label" class="efectivo-mercado example-radio-group" formControlName="medio">
+                        <mat-radio-button class="example-radio-button" *ngFor="let pago of mediosDePago" [value]="pago.value" >
+                           {{pago.text}}
+                        </mat-radio-button>
+                     </mat-radio-group>
+                  </div>
+
+                  <div>
+                     <button mat-button matStepperPrevious>Volver</button>
+                     <button mat-raised-button color="primary" matStepperNext [disabled]="ventaForm.invalid" (click)="realizarVenta()">Confirmar Compra</button>
+                  </div>
+
+               </form>
+
+            </mat-step>
+
+
+            <!-- form tres -->
+            <mat-step>
+               <ng-template matStepLabel>Listo</ng-template>
+
+               <div class="col-md-12 compra-paso3">
+                  <p>Listo terminamos.</p>
+                  <img [class]="classOk" src="../../../assets/img/ok-icon.png">
+
+                  <button mat-raised-button color="primary" routerLink="/compras">Ver mis compras</button>
+
+                  <!-- <div>
+                     <button mat-button matStepperPrevious>Volver</button>
+                     <button mat-button (click)="stepper.reset()">Reset</button>
+               </div> -->
+               </div>
+
+            </mat-step>
+
+        </mat-horizontal-stepper>
+
+    </article>
+
+</section>
+
+

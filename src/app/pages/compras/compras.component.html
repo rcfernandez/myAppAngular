@@ -1,0 +1,75 @@
+<div class="container">
+
+   <div class="row">
+      <div class="col-md-12 titulo">
+        <h1>{{titulo}}</h1>
+      </div>
+      <div class="col-md-12 subtitulo">
+        <h3>{{subtitulo}}</h3>
+      </div>
+   </div>
+
+    <mat-divider></mat-divider>
+
+   <div class="row py-1" *ngFor="let item of ventas"
+   style="
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+      margin: 20px 0 20px 0;
+   ">
+
+      <div class="col-md-12">
+         <h3>Comprado el: {{item.fecha | date}}</h3>
+      </div>
+
+      <div class="col-md-4" >
+         <table>
+            <tr>
+               <td style="padding-right: 20px;">
+                  <img style="width: 75px; height: 70px; object-fit: cover;" src="http://localhost:3000/images/productos/{{item.producto.imagen.filename}}" alt="">
+               </td>
+               <td>
+                  <p style="font-size: 16px;">{{item.producto.nombre}}</p>
+                  <p style="color: gray;">{{item.total | currency }} x {{item.cantidad}}</p>
+               </td>
+            </tr>
+         </table>
+      </div>
+
+      <div class="col-md-4">
+         <p>Medio de Pago:
+            <ng-container *ngIf="item.medio == 1">
+               Efectivo
+            </ng-container>
+            <ng-container *ngIf="item.medio == 2">
+               Mercado Pago
+            </ng-container>
+         </p>
+         <p>Estado del Pago:
+            <ng-container *ngIf="item.estado == 0" style="color: red;">
+               No Pagado
+            </ng-container>
+            <ng-container *ngIf="item.estado == 1">
+               Pagado
+            </ng-container>
+         </p>
+      </div>
+
+      <div class="col-md-4" style="text-align: center;">
+         <p><button mat-raised-button color="primary">Volver a Comprar</button></p>
+         <p><button mat-button>Detalle</button></p>
+      </div>
+
+
+
+
+   </div>
+
+
+
+
+</div>   <!-- container -->
+
+
+

@@ -5,10 +5,9 @@ import { AppComponent } from './app.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // *2 hay que agregarlo para que funcione el 'ngModel'
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { HttpClientModule } from "@angular/common/http";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { BrowserAnimationsModule, ɵBrowserAnimationBuilder } from '@angular/platform-browser/animations';
 import { TableListComponent } from './components/table-list/table-list.component';
-import { TituloComponent } from './components/titulo/titulo.component';
 
 import { HomeComponent } from './pages/home/home.component';
 import { CategoriasComponent } from './pages/categorias/categorias.component';
@@ -30,6 +29,18 @@ import { SubcategoriasComponent } from './pages/subcategorias/subcategorias.comp
 
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { DialogElementComponent } from './components/dialog-element/dialog-element.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+
+import { MatStepperModule } from '@angular/material/stepper';
+import { StatusFormComponent } from './components/status-form/status-form.component';
+import { CatalogoComponent } from './pages/catalogo/catalogo.component';
+import { CardProductoComponent } from './components/card-producto/card-producto.component';
+import { InterceptorsService } from './interceptors.service';
+import { SnackbarComponent } from './components/snackbar/snackbar.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
+import { ComprasComponent } from './pages/compras/compras.component';
+import { TituloComponent } from './components/titulo/titulo.component';
+import { DialogRegistrarmeComponent } from './components/dialog-registrarme/dialog-registrarme.component';
 
 
 
@@ -44,13 +55,24 @@ import { DialogElementComponent } from './components/dialog-element/dialog-eleme
     ProductosComponent,
     CategoriasComponent,
     TableListComponent,
-    TituloComponent,
     VentasComponent,
     MaterialTableComponent,
     DatatablaComponent,
     FooterComponent,
     SubcategoriasComponent,
-    DialogElementComponent
+    DialogElementComponent,
+    CheckoutComponent,
+    StatusFormComponent,
+    CatalogoComponent,
+    CardProductoComponent,
+    SnackbarComponent,
+    PerfilComponent,
+    ComprasComponent,
+    TituloComponent,
+    DialogRegistrarmeComponent,
+
+    BrowserModule,
+    BrowserAnimationsModule
   ],
   imports: [
     BrowserModule,
@@ -62,9 +84,12 @@ import { DialogElementComponent } from './components/dialog-element/dialog-eleme
     NgxDatatableModule,
     MaterialModule,
     FileUploadModule,
-    NgxMatFileInputModule
+    NgxMatFileInputModule,
+    MatStepperModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorsService, multi: true }
+  ],
   bootstrap: [
     AppComponent, // este es el default
     // PruebaComponent, // *1 para que empiece con este modulo

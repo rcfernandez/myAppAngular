@@ -1,0 +1,15 @@
+<mat-card>
+    <h3>Form Status:</h3>
+    <b>status : </b>{{source.status}} <br>
+    <b>valid : </b>{{source.valid}} <br>
+    <b>invalid : </b>{{source.invalid}} <br>
+    <b>touched : </b>{{source.touched}} <br>
+    <b>untouched : </b>{{source.untouched}} <br>
+    <b>pristine : </b>{{source.pristine}} <br>
+    <b>dirty : </b>{{source.dirty}} <br>
+    <b>disabled : </b>{{source.disabled}} <br>
+    <b>enabled : </b>{{source.enabled}} <br>
+    <hr>
+    <h3>Form Value:</h3>
+    {{source.value | json}}
+</mat-card>

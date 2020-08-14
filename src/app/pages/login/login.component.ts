@@ -1,15 +1,70 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from "../../services/auth.service";
+
+import { MatDialog } from '@angular/material/dialog';
+import { DialogRegistrarmeComponent } from 'src/app/components/dialog-registrarme/dialog-registrarme.component';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+   selector: 'app-login',
+   templateUrl: './login.component.html',
+   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+   hide = true;
+   myForm: FormGroup;
+   columns = [];
 
-  ngOnInit(): void {
-  }
 
-}
+   constructor(
+      private fb: FormBuilder,
+      private router: Router,
+      private authService: AuthService,
+      public dialog: MatDialog,
+      private uiService: UiService
+   ) {
+      this.prepareForm();
+   }
+
+   ngOnInit(): void {
+
+   }
+
+   prepareForm() {
+      this.myForm = this.fb.group({
+         usuario: [''],
+         password: [''],
+      });
+   }
+
+   resetForm() {
+      this.myForm.reset();
+   }
+
+   login() {
+      this.authService.login(this.myForm.value).subscribe((data) => {
+
+         if (data["message"]) {
+            data['status'] === 201 ? this.uiService.popup(data['message'], 'ok') : this.uiService.popup(data['message'], 'error')
+         }
+
+         if (data["status"] === 201) {
+            localStorage.setItem("token", data["token"]);
+            this.authService.authenticationState.next(true);
+            this.router.navigate(['/']);
+         }
+
+      });
+   }
+
+   openDialogRegister() {
+      const dialogRef = this.dialog.open(DialogRegistrarmeComponent);
+      dialogRef.afterClosed().subscribe();
+   }
+
+
+} // end class

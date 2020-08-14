@@ -4,7 +4,12 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Categoria } from '../../models/categoria.model';
 import { Dato } from 'src/app/models/dato.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FileUploader } from 'ng2-file-upload';
+import { environment } from 'src/environments/environment';
 
+const pathFolder = './public/images/categorias/'
+const UrlUpload = `${environment.endpoint}/upload?path=${pathFolder}`
+const pathImage = `${environment.endpoint}/images/categorias/`
 
 export interface Subcategoria {
   _id: String,
@@ -19,13 +24,17 @@ export interface Subcategoria {
 
 export class CategoriasComponent implements OnInit {
 
+  titulo = "Categorias"
+  subtitulo = "Aqui puede configurar las categorias de los productos"
   myForm: FormGroup;
   dato: Dato;
-  columns = [];
-  categorias: Categoria[];
+  columns=[];
+  configSnackBar = { duration: 2000, x: "right" as any, y: "top" as any };
 
-  //categoriaSelected = null
-
+  public uploader: FileUploader = new FileUploader({ url: UrlUpload, itemAlias: "photo" });
+  pathImage = pathImage;
+  imagenSeleccionada = "placeholder-image.png"
+  changeImage: Boolean = false;
 
   constructor(
     public categoriasService: CategoriasService,
@@ -45,105 +54,115 @@ export class CategoriasComponent implements OnInit {
     this.myForm = this.fb.group({
       _id: [''],
       descripcion: ['', Validators.required],
+      imagen:[''],
       subcategorias: ['']
     });
   }
 
   prepareColumns() {
     this.columns = [
-      { name: 'ID', prop: '_id' },
       { name: 'Descripcion', prop: 'descripcion' },
-      { name: 'Subcategorias', prop: 'subcategorias' },
+      // { name: 'Subcategorias', prop: "subcategorias" },
     ]
   }
 
-  traerCategorias() {
-    this.categoriasService.getCategorias().subscribe((data) => {
-      this.dato = data as Dato;
-      console.log("traerCategorias: " + this.dato)
+  onChange(event){
+    if(event.type == 'change'){
+      this.changeImage = true;
+    }
+  }
+
+  onActivate(event) {
+    if(event.type == 'click') {
+      this.cargarForm(event.row);
+      this.changeImage = false;
+    }
+  }
+
+  cargarForm(categoria: Categoria) {
+    this.myForm = this.fb.group({
+      _id: [categoria._id],
+      descripcion: [categoria.descripcion, Validators.required],
+      subcategoria: [categoria.subcategorias],
+      imagen: [categoria.imagen],
+    });
+    this.imagenSeleccionada = categoria.imagen.filename;
+  }
+
+  resetForm() {
+    this.myForm.reset();
+    this.imagenSeleccionada = 'placeholder-image.png';
+    this.changeImage = false;
+    this.traerCategoriasPaginado();
+  }
+
+  setPage(pageInfo){
+    this.categoriasService.getCategoriasPaginado(pageInfo).subscribe( res =>{
+      this.dato = res["data"] as Dato;
+      this.dato.page = pageInfo["offset"];
+    })
+  }
+
+  openSnackBar(mensaje:string) {
+    this._snackBar.open(mensaje,"", {
+      duration: this.configSnackBar.duration,
+      horizontalPosition: this.configSnackBar.x,
+      verticalPosition: this.configSnackBar.y
     });
   }
 
   traerCategoriasPaginado() {
-    this.categoriasService.getCategoriasPaginado().subscribe((data) => {
-      this.dato = data as Dato;
-      console.log("traerCategoriasPaginado: " + this.dato)
+    this.categoriasService.getCategoriasPaginado().subscribe((res) => {
+      this.dato = res["data"] as Dato;
     });
   }
 
-  altaCategoria() {
-    if (this.myForm.controls["_id"].value) {
-      // se modifica
-      this.categoriasService.modificarCategoria(this.myForm.controls["_id"].value, this.myForm.value).subscribe((data) => {
+  alta() {
+    // agrega imagen
+    if(this.changeImage){
+
+      this.uploader.uploadAll();
+      this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
+        let json = JSON.parse(response);
+        this.myForm.get('imagen').setValue(json["data"]);
+        this.guardar();
+        console.log(`ALTA: ${this.myForm.value}`);
+
+      };
+    }
+    // no agrega imagen
+    else {
+      this.guardar();
+      console.log(`paso sin guardar imagen`);
+    }
+  }
+
+  guardar(){
+    if(this.myForm.controls["_id"].value){
+      // modificacion
+      this.categoriasService.modificarCategoria(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
         this.resetForm();
         this.openSnackBar("Se ha modificado correctamente");
       });
     }
-    // sino agrega uno nuevo
-    else {
-      this.categoriasService.altaCategoria(this.myForm.value).subscribe((data) => {
+    // alta
+    else{
+      let data = this.categoriasService.altaCategoria(this.myForm.value).subscribe(() => {
         this.resetForm();
-        this.openSnackBar("Se ha agregado correctamente");
+        this.openSnackBar("Se ha generado correctamente");
       });
-
-    }
-  }
-
-  modificar(event) {
-    if (event.type == 'click') {
-      let categoria: Categoria = event.row
-      this.categoriasService.selectedCategoria = categoria;
-      
-      this.myForm = this.fb.group({
-        _id: [categoria._id],
-        descripcion: [categoria.descripcion, Validators.required],
-      });
-    }
-  }
-
-  modificarSub(event) {
-    if (event.type == 'click') {
-      let categoria: Categoria = event.row
-      this.categoriasService.selectedCategoria = categoria;
-      let subcategoria = categoria.subcategorias;
     }
   }
 
   borrar(id) {
-    if (confirm("Estas seguro de querer borrarlo?")) {
+    if(confirm("Estas seguro de querer borrarlo?")){
       this.categoriasService.borrarCategoria(id).subscribe(() => {
-        this.traerCategoriasPaginado();
+        this.resetForm();
         this.openSnackBar("Se ha borrado correctamente");
       });
     }
   }
 
-  resetForm() {
-    this.myForm.reset();
-    this.prepareForm();
-    this.traerCategoriasPaginado();
-  }
 
-  setPage(pageInfo) {
-    this.categoriasService.getCategoriasPaginado(pageInfo).subscribe((data) => {
-
-      //Registros de productos (Informacion)
-      this.categorias = data['docs'] as Categoria[];
-      this.dato = data as Dato;
-
-      //La pagina que estoy consultando
-      this.dato.page = pageInfo["offset"];
-    })
-  }
-
-  openSnackBar(mensaje: string) {
-    this._snackBar.open(mensaje, "", {
-      duration: 2000,
-      horizontalPosition: "center",
-      verticalPosition: "top"
-    });
-  }
-
-  
 
 } /*clase categorias*/

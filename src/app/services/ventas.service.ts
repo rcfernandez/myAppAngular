@@ -8,41 +8,48 @@ import { Venta } from '../models/venta.model';
 })
 export class VentasService {
 
-  selectedVenta: Venta;
+   selectedVenta: Venta;
 
-  constructor(
-    private http: HttpClient
-  ) { 
-    this.selectedVenta = new Venta();
-  }
+   constructor(
+      private http: HttpClient
+   ) {
+      this.selectedVenta = new Venta();
+   }
 
-  getVentas() {
-    return this.http.get(environment.urlApi +'/ventas');
-  }
+   getVentas() {
+      return this.http.get(environment.endpoint +'/ventas');
+   }
 
-  getVentasPaginado(pageInfo = null) {
-    let query='';
+   getVentasPaginado(pageInfo = null) {
+      let query='';
 
-    if(pageInfo){
-      query='?page='+(pageInfo["offset"]+1)
-    }
-    return this.http.get(environment.urlApi +'/ventas/paginado/'+ query);
-  }
+      if(pageInfo){
+         query='?page='+(pageInfo["offset"]+1)
+      }
+      return this.http.get(environment.endpoint +'/ventas/paginado/'+ query);
+   }
 
-  getVentasById(id) {
-    return this.http.get(environment.urlApi +'/ventas/'+ id);
-  }
+   getVentasById(id: string) {
+      return this.http.get(environment.endpoint +'/ventas/'+ id);
+   }
 
-  create(data) {
-    return this.http.post(environment.urlApi +'/ventas/', data);
-  }
+   create(data: any) {
+      return this.http.post(environment.endpoint +'/ventas/', data);
+   }
 
-  update(id, data) {
-    return this.http.put(environment.urlApi +'/ventas/'+ id, data);
-  }
+   update(id: string, data: any) {
+      return this.http.put(environment.endpoint +'/ventas/'+ id, data);
+   }
 
-  delete(id) {
-    return this.http.delete(environment.urlApi +'/ventas/'+ id);
-  }
+   delete(id: string) {
+      return this.http.delete(environment.endpoint +'/ventas/'+ id);
+   }
+
+   getVentasPorUsuario(id: string) {
+      return this.http.get(environment.endpoint +'/ventas/usuario/' + id);
+   }
+
+
+
 
 }

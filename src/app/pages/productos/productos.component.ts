@@ -21,34 +21,34 @@ export class ProductosComponent implements OnInit {
   titulo = "Productos"
   subtitulo = "Aca pueden cargar los datos de los productos"
   myForm: FormGroup;
-  dato: Dato;
+  dato: Dato = new Dato();
   columns=[];
   configSnackBar = { duration: 2000, x: "right" as any, y: "top" as any }
-  
+
   //Instanciar uploader
   public uploader: FileUploader = new FileUploader({ url: UrlUpload, itemAlias: "photo" });
   pathImage = pathImage;
   imagenSeleccionada = "placeholder-image.png"
   changeImage: Boolean = false;
-  
+
   productos: Producto[];
   categorias: Categoria[];
-  
+
   constructor(
     public productosService: ProductosService,
     public categoriasService: CategoriasService,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar
     ) {
-      this.prepareForm();
-      this.prepareColumns()
-      this.traerCategorias();      
-    }
+       this.prepareForm();
+       this.prepareColumns()
+       this.traerCategorias();
+      }
 
-  ngOnInit(): void {
-    this.traerProductosPaginado();    
-    this.setPage({ offset: 0 }); //SetPage en base a una pagina consulta productos a express
-  }    
+   ngOnInit(): void {
+      this.traerProductosPaginado();
+      this.setPage({ offset: 0 }); //SetPage en base a una pagina consulta productos a express
+   }
 
   prepareForm(){
     this.myForm = this.fb.group({
@@ -70,11 +70,11 @@ export class ProductosComponent implements OnInit {
       { name:'Nombre', prop:'nombre' },
       { name:'Descripcion',prop:'descripcion' },
       { name:'SKU',prop:'sku' },
-      { name:'Precio', prop:'precio' }, 
-      { name:'Oferta', prop:'oferta' }, 
-      { name:'Cantidad',prop:'cantidad' }, 
+      { name:'Precio', prop:'precio' },
+      { name:'Oferta', prop:'oferta' },
+      { name:'Cantidad',prop:'cantidad' },
       { name:'Categoria',prop:'categoria.descripcion' },
-      { name:'Destacado',prop:'destacado' }, 
+      { name:'Destacado',prop:'destacado' },
     ]
   }
 
@@ -137,8 +137,8 @@ export class ProductosComponent implements OnInit {
   }
 
   traerCategorias(){
-    this.categoriasService.getCategorias().subscribe((data) => {
-      this.categorias = data as Categoria[];
+    this.categoriasService.getCategorias().subscribe( res => {
+      this.categorias = res["data"] as Categoria[];
     });
   }
 
@@ -162,15 +162,16 @@ export class ProductosComponent implements OnInit {
     if(this.myForm.controls["_id"].value){
       // modificacion
       this.productosService.updateProducto(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
+        this.resetForm();
+        this.openSnackBar("Se ha modificado correctamente");
       });
-      this.resetForm();
-      this.openSnackBar("Se ha modificado correctamente");
     }
     // alta
     else{
-      this.productosService.createProducto(this.myForm.value).subscribe(() => {} );
-      this.resetForm();
-      this.openSnackBar("Se ha generado correctamente");
+      this.productosService.createProducto(this.myForm.value).subscribe(() => {
+        this.resetForm();
+        this.openSnackBar("Se ha generado correctamente");
+      });
     }
   }
 

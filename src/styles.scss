@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./variables";
 
+
 html,
 body {
   height: 100%;
@@ -14,10 +15,10 @@ body {
 }
 
 
-// FIX DROPDOWNLIST navmenu
-.mat-menu-panel, #mat-menu-panel-0 {
-  overflow-x: hidden  !important;
-}
+// // FIX DROPDOWNLIST navmenu
+// .mat-menu-panel, #mat-menu-panel-0 {
+//   overflow-x: hidden  !important;
+// }
 
 // titulos de las paginas
 .titulo h1{
@@ -70,37 +71,49 @@ input[type="file"] {
 
 // AVATAR TABLE IMG
 .table-avatar-img{
-  height: 70px;
-  width: 80px;
-  object-fit: cover;
+   height: 70px;
+   width: 80px;
+   object-fit: cover;
 }
 
 // NGX DATATABLE
 .ngx-datatable.material{
-  box-shadow:  $sombreado-card;
-  border-radius: 4px;
+   box-shadow:  $sombreado-card;
+   border-radius: 4px;
 }
 
 // tablas de productos, categoria, etc
 .datatable-data-prod {
-  
-  //encabezados
-  .datatable-header-cell {
-    text-align: center !important;
-  }
 
-  // precio
-  .datatable-body-cell:nth-child(4){
-    text-align: right !important;
-  }
+   //encabezados
+   .datatable-header-cell {
+      text-align: center !important;
+   }
 
-  // los demas
-  .datatable-body-cell:nth-child(5),
-  .datatable-body-cell:nth-child(7),
-  .datatable-body-cell:nth-child(8) {
-    text-align: center !important;
-  }
+   // precio
+   .datatable-body-cell:nth-child(4){
+      text-align: right !important;
+   }
 
+   // los demas
+   .datatable-body-cell:nth-child(5),
+   .datatable-body-cell:nth-child(7),
+   .datatable-body-cell:nth-child(8) {
+      text-align: center !important;
+   }
+
+}
+
+.color-popup-ok {
+   background-color: darkseagreen;
+   color: white;
+   font-size: 16px;
+}
+
+.color-popup-error {
+   background-color: salmon;
+   color: white;
+   font-size: 16px;
 }
 
 

@@ -3,8 +3,8 @@
 
 .example-card {
     max-width: 300px;
-    margin-bottom: 50px;;
-    
+    margin-bottom: 50px;
+
     img {
         height: 200px;
         object-fit: cover;
@@ -14,7 +14,7 @@
   .example-card:hover{
     box-shadow: $sombreado-medio;
   }
-  
+
   .example-header-image {
     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
@@ -26,7 +26,7 @@
     display: flex;
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
-    
+
     .gallery-li{
        display: -webkit-flex;
        display: flex;
@@ -34,4 +34,3 @@
 
 
  }
- 

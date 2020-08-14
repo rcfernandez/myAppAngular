@@ -12,8 +12,8 @@ export class UploadService {
   ) {   }
 
 
-  //  uploadImage(data) {
-  //   return this.http.post(environment.urlApi +'/upload', data);
-  //}
+   uploadImage(data) {
+    return this.http.post(environment.endpoint +'/upload', data);
+  }
 
 }

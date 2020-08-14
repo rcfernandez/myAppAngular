@@ -1,0 +1,118 @@
+<div class="container">
+
+   <div class="row">
+      <div class="col-md-12 titulo">
+         <h1>{{titulo}}</h1>
+      </div>
+      <div class="col-md-12 subtitulo">
+         <h3>{{subtitulo}}</h3>
+      </div>
+   </div>
+
+  <mat-divider></mat-divider>
+
+   <div class="row py-4">
+
+      <div class="col-md-5">
+
+         <mat-card>
+
+            <form class="example-form" [formGroup]="myForm">
+
+               <!-- imagen -->
+               <img mat-card-image class="card-form-img" src="{{pathImage}}{{imagenSeleccionada}}">
+
+               <!-- id - readonly -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>ID</mat-label>
+                  <input matInput formControlName="_id" readonly>
+                  <mat-icon matSuffix>fingerprint</mat-icon>
+               </mat-form-field>
+
+               <!-- usuario - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>Usuario</mat-label>
+                  <input matInput formControlName="usuario" >
+                  <mat-error *ngIf="myForm.get('usuario').hasError('required') && myForm.get('usuario').dirty ">
+                     El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- nombre - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="nombre" >
+                  <mat-error *ngIf="myForm.get('nombre').hasError('required') && myForm.get('nombre').dirty ">
+                  El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- apellido - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>Apellido</mat-label>
+                  <input matInput formControlName="apellido" >
+                  <mat-error *ngIf="myForm.get('apellido').hasError('required') && myForm.get('apellido').dirty ">
+                  El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- telefono - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>telefono</mat-label>
+                  <input matInput formControlName="telefono" >
+                  <mat-error *ngIf="myForm.get('telefono').hasError('required') && myForm.get('telefono').dirty ">
+                  El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- email - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>email</mat-label>
+                  <input matInput formControlName="email" >
+                  <mat-error *ngIf="myForm.get('email').hasError('required') && myForm.get('email').dirty ">
+                  El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- password - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>password</mat-label>
+                  <input matInput formControlName="password" >
+                  <mat-error *ngIf="myForm.get('password').hasError('required') && myForm.get('password').dirty ">
+                  El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- rol - oblig -->
+               <mat-form-field class="example-full-width">
+                  <mat-label>rol</mat-label>
+                  <input matInput formControlName="rol" >
+                  <mat-error *ngIf="myForm.get('rol').hasError('required') && myForm.get('rol').dirty ">
+                  El campo es <strong>Requerido</strong>
+                  </mat-error>
+               </mat-form-field>
+
+               <!-- imagen - upload -->
+               <input type="file" name="photo" ng2FileSelect [uploader]="uploader" (change)=onChange($event) />
+
+               <!-- acciones -->
+               <mat-card-actions align="center">
+                  <button mat-raised-button color="primary" [disabled]="myForm.invalid">Guardar</button>
+                  <button mat-stroked-button>Limpiar</button>
+               </mat-card-actions>
+
+            </form>
+
+          </mat-card>
+
+
+
+      </div>
+
+   </div>
+
+
+
+</div>
+
+

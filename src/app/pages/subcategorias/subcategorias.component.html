@@ -1,103 +1,94 @@
 <div class="container">
+
   <div class="row">
-    <h1 class="titulo">Subcategorias</h1>
+    <div class="col-md-12 titulo">
+      <h1>{{titulo}}</h1>
+    </div>
+    <div class="col-md-12 subtitulo">
+      <h3>{{subtitulo}}</h3>
+    </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-3 col-izq-cat">
+  <mat-divider></mat-divider>
+
+  <div class="row py-4">
+
+    <!-- lado izquierdo -->
+    <div class="col-md-3">
+
       <mat-card>
+
         <form class="example-form" [formGroup]="myForm">
-          <img
-            mat-card-image
-            src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-            alt="Photo of a Shiba Inu"
-          />
 
-          <!--categoria select-->
-          <select (change)="capturaEvento($event)">
-            <option *ngFor="let item of categorias" [value]="item._id">{{
-              item.descripcion
-            }}</option>
-          </select>
+          <!-- imagen -->
+          <img mat-card-image class="card-form-img" src="{{pathImage}}{{imagenSeleccionada}}">
 
-          <!-- id -->
+          <!-- categoria -->
+          <mat-form-field class="example-full-width" >
+            <mat-label>Categoría</mat-label>
+            <mat-select (selectionChange)="onChange($event.value)" id ="categoria">
+              <mat-option *ngFor="let item of categorias" [value]="item._id" >
+                {{ item.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- id - readonly -->
           <mat-form-field class="example-full-width">
-            <mat-label>ID Subcategoria</mat-label>
-            <input
-              matInput
-              formControlName="_id"
-              [(ngModel)]="categoriasService.selectedCategoria._id"
-              disabled
-            />
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="_id" readonly>
+            <mat-icon matSuffix>fingerprint</mat-icon>
           </mat-form-field>
 
           <!-- descripcion - oblig -->
           <mat-form-field class="example-full-width">
-            <mat-label>Subcategoria</mat-label>
-            <input
-              matInput
-              formControlName="descripcion"
-              [(ngModel)]="categoriasService.selectedCategoria.descripcion"
-            />
-            <mat-error *ngIf="myForm.get('descripcion').hasError('required') && myForm.get('descripcion').dirty">
+            <mat-label>Descripcion</mat-label>
+            <input matInput formControlName="descripcion" >
+            <mat-error *ngIf="myForm.get('descripcion').hasError('required') && myForm.get('descripcion').dirty ">
               El campo es <strong>Requerido</strong>
             </mat-error>
           </mat-form-field>
 
-          <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="altaSubCategoria()" [disabled]="myForm.invalid">
-              Guardar
-            </button>
-            <button mat-button (click)="resetForm()">Limpiar</button>
+          <!-- acciones -->
+          <mat-card-actions align="center">
+            <button mat-raised-button color="primary" [disabled]="myForm.invalid" (click)="alta()">Guardar</button>
+            <button mat-stroked-button (click)="resetForm()">Limpiar</button>
           </mat-card-actions>
+
         </form>
+
       </mat-card>
+
     </div>
 
-    <div class="col-md-9 col-der-cat">
+    <!-- lado derecha -->
+    <div class="col-md-9">
+
       <ngx-datatable
-        class="material"
-        [rows]="subcategorias"
-        [headerHeight]="50"
-        [footerHeight]="50"
-        rowHeight="auto"
-        columnMode="force"
-        [count]="cantidadSubcategorias"
-      >
-        <ngx-datatable-column name="Imagen" prop="img">
-          <ng-template
-            let-row="rows"
-            let-value="value"
-            ngx-datatable-cell-template
+          class="material datatable-data-cate"
+          [rows]= subcategorias
+          [headerHeight]="50"
+          [footerHeight]="50"
+          rowHeight="auto"
+          columnMode="force"
+          [externalPaging]="true"
+          [count]= cantSubcategorias
+
+          (activate)="onActivate($event)"
           >
-            <img
-              class="img-thumbnail"
-              style="height: auto; width: 100px;"
-              src="https://picsum.photos/200/200"
-              alt="Card image cap"
-            />
-          </ng-template>
-        </ngx-datatable-column>
 
-        <ngx-datatable-column
-          *ngFor="let col of columns"
-          [name]="col.name"
-          [prop]="col.prop"
-        ></ngx-datatable-column>
+          <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop"></ngx-datatable-column>
 
-        <ngx-datatable-column name="id" prop="id">
-          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <a (click)='modificar(row)' class="waves-effect waves-light btn">
-              <i class="material-icons">edit</i>
-            </a>
-            <a (click)='borrar(row)' class="waves-effect waves-light btn red darken-3">
-              <i class="material-icons">delete</i>
-            </a>
-          </ng-template>
-        </ngx-datatable-column>
+          <ngx-datatable-column name="Acciones" prop="id" >
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
+              <a (click)="borrar(row)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
+            </ng-template>
+          </ngx-datatable-column>
 
-      </ngx-datatable>
+        </ngx-datatable>
+
     </div>
-  </div>
-</div>
-<!--container-->
+
+  </div> <!--row-->
+
+</div> <!--container-->

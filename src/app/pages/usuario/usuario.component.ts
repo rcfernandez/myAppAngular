@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+ import { Component, OnInit, Input } from '@angular/core';
 import { UsuariosService } from '../../services/usuarios.service';
 import { Usuario } from '../../models/usuario.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -151,23 +151,26 @@ export class UsuarioComponent implements OnInit {
   guardar(){
     if(this.myForm.controls["_id"].value){
       // modificacion
-      this.usuariosService.modificarUsuario(this.myForm.controls["_id"].value, this.myForm.value).subscribe();
-      this.resetForm();
-      this.openSnackBar("Se ha modificado correctamente");
+      this.usuariosService.modificarUsuario(this.myForm.controls["_id"].value, this.myForm.value).subscribe( () => {
+        this.resetForm();
+        this.openSnackBar("Se ha modificado correctamente");
+      });
     }
     // alta
     else{
-      let data = this.usuariosService.altaUsuario(this.myForm.value).subscribe();
-      this.resetForm();
-      this.openSnackBar("Se ha generado correctamente");
+      let data = this.usuariosService.altaUsuario(this.myForm.value).subscribe( () => {
+        this.resetForm();
+        this.openSnackBar("Se ha generado correctamente");
+      });
     }
   }
 
   borrar(id) {
     if(confirm("Estas seguro de querer borrarlo?")){
-      this.usuariosService.borrarUsuario(id).subscribe(() => { });
-      this.resetForm();
-      this.openSnackBar("Se ha borrado correctamente");
+      this.usuariosService.borrarUsuario(id).subscribe(() => { 
+        this.resetForm();
+        this.openSnackBar("Se ha borrado correctamente");
+       });
     }
   }
 

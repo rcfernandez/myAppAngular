@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  urlApi: 'http://localhost:3000',
+  endpoint: 'http://localhost:3000',
+  configSnackBar : { duration: 2000, x: "center" as any, y: "top" as any }
 };
 
 /*

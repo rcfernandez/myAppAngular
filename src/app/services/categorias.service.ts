@@ -17,9 +17,9 @@ export class CategoriasService {
       this.selectedCategoria = new Categoria();
     }
 
-  // GET CATEGORIAS
+
   getCategorias() {
-    return this.http.get(environment.urlApi +'/categorias'); 
+    return this.http.get(environment.endpoint +'/categorias');
   }
 
   getCategoriasPaginado(pageInfo = null){
@@ -28,36 +28,36 @@ export class CategoriasService {
     if(pageInfo){
       query='?page='+( pageInfo["offset"]+1 )
     }
-    return this.http.get(environment.urlApi +'/categorias/paginado/' + query); 
+    return this.http.get(environment.endpoint +'/categorias/paginado/' + query);
   }
 
   getCategoriaById(id) {
-    return this.http.get(environment.urlApi +'/categorias/'+ id);
+    return this.http.get(environment.endpoint +'/categorias/'+ id);
   }
 
   altaCategoria(data) {
-    return this.http.post(environment.urlApi +'/categorias/', data);
+    return this.http.post(environment.endpoint +'/categorias/', data);
   }
 
   modificarCategoria(id, data) {
-    return this.http.put(environment.urlApi +'/categorias/'+ id, data);
+    return this.http.put(environment.endpoint +'/categorias/'+ id, data);
   }
 
   borrarCategoria(id) {
-    return this.http.delete(environment.urlApi +'/categorias/'+ id);
+    return this.http.delete(environment.endpoint +'/categorias/'+ id);
   }
 
   altaSubCategoria(idCategoria, data){
-    return this.http.put(environment.urlApi +'/categorias/altasubcategoria/' + idCategoria, data);
+    return this.http.put(environment.endpoint +'/categorias/altasubcategoria/' + idCategoria, data);
   }
 
   modificarSubCategoria(idCategoria, data){
-    return this.http.put(environment.urlApi +'/categorias/modificarsubcategoria/' + idCategoria, data);
+    return this.http.put(environment.endpoint +'/categorias/modificarsubcategoria/' + idCategoria, data);
   }
 
   borrarSubcategoria(idCategoria: String, data) {
-    return this.http.put(environment.urlApi +'/categorias/borrarsubcategoria/'+ idCategoria, data);
+    return this.http.put(environment.endpoint +'/categorias/borrarsubcategoria/'+ idCategoria, data);
   }
-  
+
 
 }

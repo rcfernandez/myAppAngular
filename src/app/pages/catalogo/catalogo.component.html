@@ -1,0 +1,65 @@
+<div class="container">
+
+   <div class="row">
+
+      <div class="col-md-3">
+
+         <app-titulo subtitulo="Filtros"></app-titulo>
+
+         <mat-card>
+
+            <form class="example-form" [formGroup]="myForm" (keyup)="onChangeForm()">
+
+               <!-- buscador -->
+               <mat-form-field appearance="fill" style="margin: 20px 0">
+                  <mat-label>Buscador</mat-label>
+                  <input matInput autocomplete="off" formControlName="buscador">
+               </mat-form-field>
+
+               <!-- precio minimo -->
+               <mat-form-field appearance="fill" style="margin: 20px 0">
+                  <mat-label>Mín Precio</mat-label>
+                  <input type="number" matInput autocomplete="off" formControlName="minimo">
+               </mat-form-field>
+
+               <!-- precio maximo -->
+               <mat-form-field appearance="fill" style="margin: 20px 0">
+                  <mat-label>Máx Precio</mat-label>
+                  <input type="number" matInput autocomplete="off" formControlName="maximo">
+               </mat-form-field>
+
+               <!-- categoria -->
+               <mat-form-field appearance="fill">
+                  <mat-label>Elige un categoria</mat-label>
+                  <mat-select formControlName="categoria" (selectionChange)="onChange($event.value)">
+                     <mat-option value="all">Todas</mat-option>
+                     <mat-option *ngFor="let item of categoriasSelect" [value]="item._id" >{{ item.descripcion }}</mat-option>
+                  </mat-select>
+               </mat-form-field>
+
+               <!-- acciones -->
+               <mat-card-actions align="center">
+                  <button mat-raised-button color="primary">Buscar</button>
+                  <button mat-stroked-button (click)="resetForm()">Limpiar</button>
+               </mat-card-actions>
+
+            </form>
+         </mat-card>
+
+      </div>
+
+      <div class="col-md-9">
+
+            <app-titulo titulo="{{titulo}}"></app-titulo>    <!-- titulo, subtitulo -->
+            <ng-container *ngIf="productos;else templateNoData">
+               <app-card-producto [source]="productos"></app-card-producto>
+            </ng-container>
+            <ng-template #templateNoData>
+               <p style="padding: 50px;">No hay productos para mostrar</p>
+            </ng-template>
+
+      </div>
+
+   </div>   <!--row-->
+
+</div>      <!--container-->

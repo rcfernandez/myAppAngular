@@ -3,6 +3,7 @@ import { ProductosService } from 'src/app/services/productos.service';
 import { Producto } from 'src/app/models/producto.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogElementComponent } from 'src/app/components/dialog-element/dialog-element.component';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -16,13 +17,13 @@ export class HomeComponent implements OnInit {
 
   titulo = "Destacados";
   subtitulo = "Aqui puede ver los productos destacados";
-  pathImage = "http://localhost:3000/images/productos/";
+  pathImage = `${environment.endpoint}/images/productos/`;
 
   constructor(
     private productosService: ProductosService,
     public dialog: MatDialog
     ) {
-    
+
   }
 
   ngOnInit(): void {
@@ -30,12 +31,12 @@ export class HomeComponent implements OnInit {
   }
 
   getProductosDestacados(){
-    this.productosService.getDestacados().subscribe((data) => {
-      this.productos = data as Producto[];
+    this.productosService.getDestacados().subscribe((res) => {
+      this.productos = res['data'] as Producto[];
     });
   }
 
-  openDialog(producto: Producto) {  
+  openDialog(producto: Producto) {
 
     const dialogRef = this.dialog.open(DialogElementComponent, {
       // width: '330px',
@@ -46,6 +47,8 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
      //console.log(`Dialog result: ${result}`);
     });
+
+
   }
 
 

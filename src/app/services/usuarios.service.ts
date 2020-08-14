@@ -18,7 +18,7 @@ export class UsuariosService {
   }
 
   getUsuarios() {
-    return this.http.get(environment.urlApi +'/usuarios');
+    return this.http.get(environment.endpoint +'/usuarios');
   }
 
   getUsuariosPaginado(pageInfo = null){
@@ -27,25 +27,28 @@ export class UsuariosService {
     if(pageInfo){
       query='?page='+( pageInfo["offset"]+1 )
     }
-    return this.http.get(environment.urlApi +'/usuarios/paginado/' + query); 
+    return this.http.get(environment.endpoint +'/usuarios/paginado/' + query);
   }
 
   getUsuarioById(id) {
-    return this.http.get(environment.urlApi +'/usuarios/'+ id);
+    return this.http.get(environment.endpoint +'/usuarios/'+ id);
   }
 
   altaUsuario(data) {
-    return this.http.post(environment.urlApi +'/usuarios/', data);
+    return this.http.post(environment.endpoint +'/usuarios/', data);
   }
 
   modificarUsuario(id, data) {
-    return this.http.put(environment.urlApi +'/usuarios/'+ id, data);
-  }
-  
-  borrarUsuario(id) {
-    return this.http.delete(environment.urlApi +'/usuarios/'+ id);
+    return this.http.put(environment.endpoint +'/usuarios/'+ id, data);
   }
 
+  borrarUsuario(id) {
+    return this.http.delete(environment.endpoint +'/usuarios/'+ id);
+  }
+
+  // loginUsuario(data) {
+  //   return this.http.post(environment.endpoint +'/usuarios/login', data);
+  // }
 
 
 }

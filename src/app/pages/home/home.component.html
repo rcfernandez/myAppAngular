@@ -1,41 +1,33 @@
 <div class="container">
 
-  <div class="row">
-    <div class="col-md-12 titulo">
-      <h1>{{titulo}}</h1>
-    </div>
-    <div class="col-md-12 subtitulo">
-      <h3>{{subtitulo}}</h3>
-    </div>
-  </div>
-    
-  <mat-divider></mat-divider>
+
+  <app-titulo titulo="Productos Destacados" subtitulo="Estos son los productos mas valorados"></app-titulo>
 
   <div class="row py-4 gallery">
 
     <div class="col-md-3 gallery-li" *ngFor="let producto of productos">
       <mat-card class="example-card" >
-         
+
         <img mat-card-image class="card-home-img" src="{{pathImage}}{{producto.imagen.filename}}" alt="{{producto.imagen.originalname}}">
-        
+
         <mat-card-header>
           <mat-card-title>{{ producto.nombre }}</mat-card-title>
         </mat-card-header>
-          
+
         <mat-card-content>
           <p>{{ producto.descripcion }}</p>
           <p>Precio: {{ producto.precio }}</p>
           <mat-card-subtitle>Categoria: {{ producto.categoria.descripcion }}</mat-card-subtitle>
           <mat-card-subtitle>Stock: {{ producto.cantidad }}</mat-card-subtitle>
         </mat-card-content>
-        
+
         <mat-card-actions class="card-botones" align="center">
-          <button mat-button  color="primary">Comprar</button>
+          <!-- <button mat-button [routerLink]="['/checkout', producto._id]" color="primary">Comprar</button> -->
           <button mat-button (click)="openDialog(producto)">Detalle</button>
         </mat-card-actions>
-    
+
       </mat-card>
-  
+
     </div>
 
 

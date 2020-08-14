@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CategoriasService } from 'src/app/services/categorias.service';
 import { Categoria } from 'src/app/models/categoria.model';
+import { invalid } from '@angular/compiler/src/render3/view/util';
+
+
+const pathFolder = './public/images/categorias/'
+const UrlUpload = `http://localhost:3000/upload?path=${pathFolder}`
+const pathImage = "http://localhost:3000/images/categorias/"
+
 
 export interface Subcategoria {
   _id: String,
@@ -17,13 +24,25 @@ export interface Subcategoria {
 
 export class SubcategoriasComponent implements OnInit {
 
+  titulo = "Subcategorias"
+  subtitulo = "Hola aca podrás agregar subcategorias a las categorias!"
   myForm: FormGroup;
+  // dato: Dato;
+  columns=[];
+  configSnackBar = { duration: 2000, x: "right" as any, y: "top" as any };
+
+  imagenSeleccionada = "placeholder-image.png"
+  pathImage = pathImage;
+
+
+
+  // myForm: FormGroup;
   categorias: Categoria[];
   subcategorias: Subcategoria[];
-  cantidadSubcategorias: number;
-  columns = [];
+  cantSubcategorias: number;
+  // columns = [];
 
-  idCategoriaSeleccionada: String = "";
+  idCategoriaSeleccionada: String;
   subcategoriaSeleccionada: Subcategoria;
 
   constructor(
@@ -33,114 +52,114 @@ export class SubcategoriasComponent implements OnInit {
   ) {
     this.prepareForm();
     this.prepareColumns();
+    this.traerCategorias()
   }
 
   ngOnInit(): void {
-    this.traerCategorias()
+
   }
 
   prepareForm() {
     this.myForm = this.fb.group({
       _id: [''],
-      descripcion: [''],
+      descripcion: ['', Validators.required],
     });
   }
 
   prepareColumns() {
     this.columns = [
-      { name: '_id', prop: '_id' },
-      { name: 'descripcion', prop: 'descripcion' },
+      // { name: '_id', prop: '_id' },
+      { name: 'Descripcion', prop: 'descripcion' },
     ]
   }
 
+  onActivate(event) { 
+    if(event.type == 'click') {
+      this.cargarForm(event.row);
+      // this.changeImage = false;
+    }
+  }
+
+  cargarForm(subcategoria: Subcategoria) {
+    this.myForm = this.fb.group({
+      _id: [subcategoria._id],
+      descripcion: [subcategoria.descripcion, Validators.required],
+      // subcategoria: [subcategoria.subcategorias],
+      // imagen: [categoria.imagen],
+    });
+    // this.imagenSeleccionada = categoria.imagen.filename;
+  }
+
+  resetForm() {
+    this.myForm.reset();
+    if(this.idCategoriaSeleccionada){
+      this.traerSubcategorias(this.idCategoriaSeleccionada);
+      this.categoriasService.getCategoriaById(this.idCategoriaSeleccionada).subscribe( (res) => {
+        this.imagenSeleccionada = res["data"]["imagen"].filename;
+      })
+    }
+    // else{
+    //   this.imagenSeleccionada = 'placeholder-image.png';
+    // }
+   // this.traerCategorias();
+  }
+
+  openSnackBar(mensaje:string) {
+    this._snackBar.open(mensaje,"", {
+      duration: this.configSnackBar.duration,
+      horizontalPosition: this.configSnackBar.x,
+      verticalPosition: this.configSnackBar.y
+    });
+  }
+
   traerCategorias() {
-    this.categoriasService.getCategorias().subscribe((data) => {
-      this.categorias = data as Categoria[];
-      console.log("traerAllCategorias: ", data)
+    this.categoriasService.getCategorias().subscribe(res => {
+      this.categorias = res["data"] as Categoria[];
     });
   }
 
   traerSubcategorias(idCategoria) {
-    this.categoriasService.getCategoriaById(idCategoria).subscribe(data => {
-      this.subcategorias = data["subcategorias"];
-      console.log("subcategorias: ", this.subcategorias)
+    this.categoriasService.getCategoriaById(idCategoria).subscribe(res => {
+      this.subcategorias = res["data"]["subcategorias"] as Subcategoria[];
+      this.cantSubcategorias = this.subcategorias.length;
     });
+    this.idCategoriaSeleccionada = idCategoria;
   }
 
-  capturaEvento(event) {
-    this.idCategoriaSeleccionada = event.target.value
+  onChange(id) {
+    this.idCategoriaSeleccionada = id
+    this.categoriasService.getCategoriaById(id).subscribe( (res) => {
+      this.imagenSeleccionada = res["data"]["imagen"].filename;
+    })
     this.traerSubcategorias(this.idCategoriaSeleccionada)
-    console.log("event.target.value: ", event.target.value);
   }
 
-  altaSubCategoria() {
+  alta() {
 
     if (this.myForm.controls["_id"].value) {
       // se modifica
       this.categoriasService.modificarSubCategoria(this.idCategoriaSeleccionada, this.myForm.value).subscribe((data) => {
-        this.openSnackBar("Se ha modificado correctamente");
+        this.resetForm();
       });
-      this.resetForm();
+      this.openSnackBar("Se ha modificado correctamente");
     }
     // sino agrega uno nuevo
     else {
       this.categoriasService.altaSubCategoria(this.idCategoriaSeleccionada, this.myForm.value).subscribe((data) => {
+        this.resetForm();
         this.openSnackBar("Se ha agregado correctamente");
       });
-      this.resetForm();
-
     }
   }
 
-  borrar(row: Subcategoria) {   
-
-    console.log('this.idCategoriaSeleccionada: ', this.idCategoriaSeleccionada);
-    console.log('row: ', row);
-    
+  borrar(row: Subcategoria) {       
     if (confirm("Estas seguro de querer borrarlo?")) {
-
-      this.categoriasService.borrarSubcategoria(this.idCategoriaSeleccionada, row).subscribe((data) => {
-        //this.traerCategorias();
-        console.log("data: ", data)
-      });
-      this.resetForm();
-      this.openSnackBar("Se ha borrado correctamente");      
-    }
-
-  }
-
-
-  modificar(event) {
-    if (event.type == 'click') {
-      this.subcategoriaSeleccionada = event.row
-      //this.categoriasService.selectedCategoria = categoria;
-      console.log("this.subcategoriaSeleccionada: ", this.subcategoriaSeleccionada);
-
-      this.myForm = this.fb.group({
-        _id: this.subcategoriaSeleccionada._id,
-        descripcion: this.subcategoriaSeleccionada.descripcion,
+      this.categoriasService.borrarSubcategoria(this.idCategoriaSeleccionada, row).subscribe(() => {
+        this.resetForm();
+        this.openSnackBar("Se ha borrado correctamente");      
       });
     }
   }
-
-  resetForm() {
-    //this.myForm.reset();
-    console.log("this.idCategoriaSeleccionada", this.idCategoriaSeleccionada);
-
-    this.prepareForm();
-    //this.traerCategorias();
-    this.traerSubcategorias(this.idCategoriaSeleccionada);
-  }
-
-  openSnackBar(mensaje: string) {
-    this._snackBar.open(mensaje, "", {
-      duration: 2000,
-      horizontalPosition: "center",
-      verticalPosition: "top"
-    });
-  }
-
-
 
 
 } /*CLASE SUBCATEGORIA*/

@@ -22,6 +22,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 
+
 @NgModule({
   declarations: [],
   imports: [
@@ -45,7 +46,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
     MatSnackBarModule,
     MatDialogModule,
     MatGridListModule,
-    MatSlideToggleModule,
+    MatSlideToggleModule
   ],
   exports: [
     MatToolbarModule,

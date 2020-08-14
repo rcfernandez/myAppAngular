@@ -1,9 +1,22 @@
-img{
-    height: 200px;
-    object-fit: cover;
-}
+// formulario
 
 
-.col-izq-cat, .col-der-cat{
-    margin: 20px 0 0 0;
+// tabla --- no anda revisar
+.datatable-data-cate {
+
+    .datatable-header-cell {
+        text-align: center !important;
+    }
+    
+    // precio
+    .datatable-body-cell:nth-child(2){
+    text-align: center !important;
+    }
+    
+    // los demas
+    .datatable-body-cell:nth-child(3) {
+    text-align: right !important;
+    }
+ 
+
 }

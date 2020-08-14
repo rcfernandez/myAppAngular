@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { Producto } from 'src/app/models/producto.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -8,16 +7,17 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./dialog-element.component.scss']
 })
 export class DialogElementComponent implements OnInit {
-  
-  pathImage = "http://localhost:3000/images/productos/"; 
-  
+
+  pathImage = "http://localhost:3000/images/productos/";
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+  ) {
 
   }
 
   ngOnInit(): void {
   }
+
 
 }
