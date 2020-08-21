@@ -65,7 +65,7 @@ export class AuthService {
    // si es un usuario logueado
    isAuthenticatedUser(){
       let decodeToken = jwt_decode(localStorage.getItem('token'))
-      if (this.authenticationState.value && decodeToken.usuario.rol == 2 ) {
+      if (this.authenticationState.value && decodeToken.usuario.rol == 0 ) {
          return true;
       }
       return false;
@@ -82,7 +82,11 @@ export class AuthService {
 
    registerUser(data) {
       return this.http.post(environment.endpoint +'/auth/register/', data);
-    }
+   }
+
+   updateUser(data) {
+      return this.http.post(environment.endpoint +'/auth/update/', data);
+   }
 
    userExistInDB(name: string){
       return this.http.get(environment.endpoint +'/auth/checkUsername/'+ name);

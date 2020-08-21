@@ -45,11 +45,11 @@ export class VentasService {
       return this.http.delete(environment.endpoint +'/ventas/'+ id);
    }
 
-   getVentasPorUsuario(id: string) {
-      return this.http.get(environment.endpoint +'/ventas/usuario/' + id);
+   getVentasPorUsuario(id: string, page: any) {
+      let query = `?page=${page['pageIndex']+1}&limit=${page['pageSize']}`;
+
+      return this.http.get(environment.endpoint +'/ventas/usuario/' + id + query);
    }
-
-
 
 
 }

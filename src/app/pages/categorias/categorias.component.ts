@@ -6,6 +6,7 @@ import { Dato } from 'src/app/models/dato.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
+import { UiService } from 'src/app/services/ui.service';
 
 const pathFolder = './public/images/categorias/'
 const UrlUpload = `${environment.endpoint}/upload?path=${pathFolder}`
@@ -29,7 +30,6 @@ export class CategoriasComponent implements OnInit {
   myForm: FormGroup;
   dato: Dato;
   columns=[];
-  configSnackBar = { duration: 2000, x: "right" as any, y: "top" as any };
 
   public uploader: FileUploader = new FileUploader({ url: UrlUpload, itemAlias: "photo" });
   pathImage = pathImage;
@@ -39,7 +39,7 @@ export class CategoriasComponent implements OnInit {
   constructor(
     public categoriasService: CategoriasService,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar
+    private uiService: UiService
   ) {
     this.prepareForm();
     this.prepareColumns();
@@ -103,19 +103,15 @@ export class CategoriasComponent implements OnInit {
     })
   }
 
-  openSnackBar(mensaje:string) {
-    this._snackBar.open(mensaje,"", {
-      duration: this.configSnackBar.duration,
-      horizontalPosition: this.configSnackBar.x,
-      verticalPosition: this.configSnackBar.y
-    });
-  }
-
-  traerCategoriasPaginado() {
-    this.categoriasService.getCategoriasPaginado().subscribe((res) => {
-      this.dato = res["data"] as Dato;
-    });
-  }
+   traerCategoriasPaginado() {
+      this.categoriasService.getCategoriasPaginado().subscribe(res => {
+         if(res['status'] == 'success') {
+            this.dato = res["data"] as Dato;
+         } else {
+            this.uiService.popup(res['message'], 'error')
+         }
+      });
+   }
 
   alta() {
     // agrega imagen
@@ -137,31 +133,43 @@ export class CategoriasComponent implements OnInit {
     }
   }
 
-  guardar(){
-    if(this.myForm.controls["_id"].value){
-      // modificacion
-      this.categoriasService.modificarCategoria(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
-        this.resetForm();
-        this.openSnackBar("Se ha modificado correctamente");
-      });
-    }
-    // alta
-    else{
-      let data = this.categoriasService.altaCategoria(this.myForm.value).subscribe(() => {
-        this.resetForm();
-        this.openSnackBar("Se ha generado correctamente");
-      });
-    }
-  }
+   guardar(){
+      if(this.myForm.controls["_id"].value){
+         // modificacion
+         this.categoriasService.modificarCategoria(this.myForm.controls["_id"].value, this.myForm.value).subscribe(res => {
+            if(res['status'] == 'success'){
+               this.resetForm();
+               this.uiService.popup(res['message'], 'ok')
+            } else {
+               this.uiService.popup(res['message'], 'error')
+            }
+         });
+      }
+      // alta
+      else{
+         let data = this.categoriasService.altaCategoria(this.myForm.value).subscribe(res => {
+            if(res['status'] == 'success'){
+               this.resetForm();
+               this.uiService.popup(res['message'], 'ok')
+            } else {
+               this.uiService.popup(res['message'], 'error')
+            }
+         });
+      }
+   }
 
-  borrar(id) {
-    if(confirm("Estas seguro de querer borrarlo?")){
-      this.categoriasService.borrarCategoria(id).subscribe(() => {
-        this.resetForm();
-        this.openSnackBar("Se ha borrado correctamente");
-      });
-    }
-  }
+   borrar(id) {
+      if(confirm("Estas seguro de querer borrarlo?")){
+         this.categoriasService.borrarCategoria(id).subscribe(res => {
+            if(res['status'] == 'success'){
+               this.resetForm();
+               this.uiService.popup(res['message'], 'ok')
+            } else {
+               this.uiService.popup(res['message'], 'error')
+            }
+         });
+      }
+   }
 
 
 

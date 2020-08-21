@@ -1,0 +1,27 @@
+.pagado,
+.no-pagado {
+   padding: 3px 10px;
+   color: white;
+   border-radius: 3px;
+}
+
+.pagado {
+   background-color: darkseagreen;
+}
+
+.no-pagado {
+   background-color: salmon;
+}
+
+.imagen-tabla-ventas {
+      width: 100%;
+      object-fit: contain;
+
+}
+
+.example-form {
+   img {
+      height: 200px;
+      object-fit: contain;
+   }
+}

@@ -1,8 +1,93 @@
-<!-- componente navbar -->
-<app-navbar></app-navbar>
+<mat-sidenav-container class="example-container">
 
-<div class="container">
+   <mat-sidenav #sidenav mode="over" >
+     <div class="container">
+        <div class="row menu-lateral">
+
+            <div class="col-md-12 avatar-container" *ngIf="usuario">
+               <img src="{{pathImage}}{{usuario.imagen.filename}}" alt="tú">
+            </div>
+
+            <div class="col-md-12 datos-personales" *ngIf="usuario">
+               <span class="nombre">{{usuario.nombre}} {{usuario.apellido}}</span>
+               <br>
+               <span class="email">{{usuario.email}}</span>
+               <br>
+               <span class="rol" *ngIf="usuario.rol == 0">user</span>
+               <span class="rol" *ngIf="usuario.rol == 1">admin</span>
+
+            </div>
+
+
+            <div class="col-md-12 enlaces" >
+
+               <!-- modo usuario -->
+               <ng-container *ngIf="isLoginUser">
+                  <button mat-raised-button color="primary" [routerLink]="button.link" *ngFor="let button of buttonsUser" (click)="sidenav.close()">{{button.text}}</button>
+               </ng-container>
+
+               <!-- modo admin -->
+               <!-- <ng-container *ngIf="isLoginAdmin">
+                  <button mat-raised-button color="primary" [matMenuTriggerFor]="adminMenu" >Administración</button>
+                  <mat-menu #adminMenu="matMenu">
+                     <button mat-menu-item [routerLink]="button.link" *ngFor="let button of buttonsAdmin" (click)="sidenav.close()">{{button.text}}</button>
+                     <button mat-menu-item [matMenuTriggerFor]="categorias">Categorias</button>
+                  </mat-menu>
+                  <mat-menu #categorias="matMenu">
+                     <button mat-menu-item [routerLink]="button.link" *ngFor="let button of buttonsCategorias">{{button.text}}</button>
+                  </mat-menu>
+               </ng-container> -->
+
+
+               <ng-container *ngIf="isLoginAdmin">
+                  <button mat-raised-button color="primary" [routerLink]="button.link" *ngFor="let button of buttonsUser" (click)="sidenav.close()">{{button.text}}</button>
+                  <p class="titulo-administracion">Administración</p>
+                  <mat-divider class="divider"></mat-divider>
+                  <button mat-stroked-button color="primary" [routerLink]="button.link" *ngFor="let button of buttonsAdmin" (click)="sidenav.close()">{{button.text}}</button>
+               </ng-container>
+
+               <button mat-flat-button color="warn" class="btn-logout" (click)="logout()" (click)="sidenav.close()" *ngIf="isLoginUser || isLoginAdmin">Logout</button>
+            </div>
+
+        </div>
+     </div>
+   </mat-sidenav>
+
+   <mat-sidenav-content>
+
+      <app-navbar [inputSideNav]="sidenav"></app-navbar>
+      <div class="container">
+         <router-outlet></router-outlet>
+      </div>
+      <app-footer></app-footer>
+
+   </mat-sidenav-content>
+
+ </mat-sidenav-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="container">
    <router-outlet></router-outlet>
-</div>
+</div> -->
 
-<app-footer></app-footer>
+
+
+
+
+
+

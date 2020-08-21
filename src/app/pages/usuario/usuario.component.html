@@ -10,26 +10,26 @@
   </div>
 
   <mat-divider></mat-divider>
-    
+
   <div class="row py-4">
 
     <!-- lado izquierdo -->
     <div class="col-md-3">
-      
+
       <mat-card>
-      
+
         <form class="example-form" [formGroup]="myForm">
 
           <!-- imagen -->
           <img mat-card-image class="card-form-img" src="{{pathImage}}{{imagenSeleccionada}}">
-      
+
           <!-- id - readonly -->
           <mat-form-field class="example-full-width">
             <mat-label>ID</mat-label>
             <input matInput formControlName="_id" readonly>
             <mat-icon matSuffix>fingerprint</mat-icon>
           </mat-form-field>
-          
+
           <!-- nombre - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>Nombre</mat-label>
@@ -38,13 +38,13 @@
               El campo es <strong>Requerido</strong>
             </mat-error>
           </mat-form-field>
-          
+
           <!-- apellido -->
           <mat-form-field class="example-full-width">
             <mat-label>Apellido</mat-label>
             <input matInput formControlName="apellido">
           </mat-form-field>
-          
+
           <!-- usuario - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>Usuario</mat-label>
@@ -59,7 +59,7 @@
             <mat-label>Telefono</mat-label>
             <input type="tel" matInput formControlName="telefono">
           </mat-form-field>
-          
+
           <!-- email - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>Email</mat-label>
@@ -68,7 +68,7 @@
               El campo es <strong>Requerido</strong>
             </mat-error>
           </mat-form-field>
-          
+
           <!-- password - oblig -->
           <mat-form-field class="example-full-width">
             <mat-label>Password</mat-label>
@@ -77,14 +77,17 @@
               El campo es <strong>Requerido</strong>
             </mat-error>
           </mat-form-field>
-                                                
+
           <!-- imagen - upload -->
           <input type="file" name="photo" ng2FileSelect [uploader]="uploader" (change)=onChange($event) />
-         
-          <!-- rol -->
-          <mat-form-field class="example-full-width">
+
+          <!-- rol - select -->
+          <mat-form-field class="example-full-width" >
             <mat-label>Rol</mat-label>
-            <input type="number" matInput formControlName="rol" >
+            <mat-select formControlName="rol">
+              <mat-option [value]="0" >Usuario</mat-option>
+              <mat-option [value]="1" >Administrador</mat-option>
+            </mat-select>
           </mat-form-field>
 
           <!-- acciones -->
@@ -94,14 +97,14 @@
           </mat-card-actions>
 
         </form>
-        
+
       </mat-card>
-            
+
     </div>
 
     <!-- lado derecha -->
     <div class="col-md-9">
-         
+
       <ngx-datatable
           class="material datatable-data-usu"
           [rows]= dato.docs
@@ -115,23 +118,23 @@
           (page)="setPage($event)"
           (activate)="onActivate($event)"
           >
-          
+
           <ngx-datatable-column name="Imagen" prop="imagen">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <img class="table-avatar-img" src="{{pathImage}}{{row.imagen.filename}}"> 
-            </ng-template>  
+              <img class="table-avatar-img" src="{{pathImage}}{{row.imagen?.filename}}">
+            </ng-template>
           </ngx-datatable-column>
 
           <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop"></ngx-datatable-column>
-      
+
           <ngx-datatable-column name="Eliminar" prop="id" >
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
               <a (click)="borrar(value)" class="waves-effect waves-light btn red darken-3"><i class="material-icons">delete</i></a>
-            </ng-template>  
+            </ng-template>
           </ngx-datatable-column>
-      
+
         </ngx-datatable>
-      
+
     </div>
 
   </div> <!--row-->

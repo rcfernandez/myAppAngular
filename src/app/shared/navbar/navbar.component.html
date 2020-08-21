@@ -1,56 +1,34 @@
 <mat-toolbar color="primary">
 
-    <div class="container">
+   <div class="container">
 
-        <div class="row">
+      <div class="row">
 
-            <div class="col-sm-4 col-xs-12 col-logo">
-                <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-                  <mat-icon>menu</mat-icon>
-                </button>
-                <img class="logo-img" src="http://localhost:3000/images/placeholders/logo_blanco.png">
-            </div>
+         <div class="col-sm-4 col-xs-12 col-logo">
+            <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="inputSideNav.toggle()">
+               <mat-icon>menu</mat-icon>
+            </button> -->
+            <img src="../../../assets/img/logo_blanco.png" alt="tiendaloca.com" routerLink='/'>
+         </div>
 
-            <div class="col-sm-8 col-menu">
+         <div class="col-sm-7 col-menu">
 
+            <div class="enlaces">
                <button mat-button [routerLink]="button.link" *ngFor="let button of buttonsCommon">{{button.text}}</button>
-
-               <ng-container *ngIf="isLoginUser">
-                  <button mat-button [routerLink]="button.link" *ngFor="let button of buttonsUser">{{button.text}}</button>
-               </ng-container>
-
-               <ng-template>
-
-               </ng-template>
-
-               <ng-container *ngIf="isLoginAdmin">
-
-                  <button mat-button [matMenuTriggerFor]="adminMenu" >Administración</button>
-                  <mat-menu #adminMenu="matMenu">
-                     <button mat-menu-item [routerLink]="button.link" *ngFor="let button of buttonsAdmin">{{button.text}}</button>
-                     <button mat-menu-item [matMenuTriggerFor]="categorias">Categorias</button>
-                  </mat-menu>
-                  <mat-menu #categorias="matMenu">
-                     <button mat-menu-item [routerLink]="button.link" *ngFor="let button of buttonsCategorias">{{button.text}}</button>
-                  </mat-menu>
-
-               </ng-container>
-
-
-              <button mat-button [routerLink]="'/login'" *ngIf="!isLoginUser && !isLoginAdmin">Login</button>
-              <button mat-button (click)="logout()" *ngIf="isLoginUser || isLoginAdmin">Logout</button>
-
-              <ng-container *ngIf="isLoginAdmin || isLoginUser">
-               <span *ngIf="usuario" style="font-size: 15px; color:darkgrey">
-                 <img  src="{{pathImage}}{{usuario.imagen.filename}}" width="50"/>
-                 Hola {{ usuario.nombre }}
-               </span>
-             </ng-container>
-
+               <button mat-flat-button [routerLink]="'/login'" *ngIf="!isLoginUser && !isLoginAdmin">Login</button>
             </div>
 
-        </div>
+         </div>
 
-    </div>
+         <div class="col-sm-1 col-avatar">
+            <ng-container *ngIf="isLoginAdmin || isLoginUser">
+               <img *ngIf="usuario" src="{{pathImage}}{{usuario.imagen.filename}}" (click)="inputSideNav.toggle()">
+            </ng-container>
+         </div>
+
+      </div>
+
+   </div>
 
 </mat-toolbar>
+

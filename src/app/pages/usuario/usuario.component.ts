@@ -3,12 +3,12 @@ import { UsuariosService } from '../../services/usuarios.service';
 import { Usuario } from '../../models/usuario.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Dato } from 'src/app/models/dato.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploader } from 'ng2-file-upload';
+import { UiService } from 'src/app/services/ui.service';
+import { environment } from 'src/environments/environment';
 
 const pathFolder = './public/images/usuarios/'
-const UrlUpload = `http://localhost:3000/upload?path=${pathFolder}`
-const pathImage = "http://localhost:3000/images/usuarios/"
+const UrlUpload = `${environment.endpoint}/upload?path=${pathFolder}`;
 
 @Component({
   selector: 'app-usuario',
@@ -22,20 +22,19 @@ export class UsuarioComponent implements OnInit {
   myForm: FormGroup;
   dato: Dato;
   columns=[];
-  configSnackBar = { duration: 2000, x: "right" as any, y: "top" as any };
 
   //Instanciar uploader
   public uploader: FileUploader = new FileUploader({ url: UrlUpload, itemAlias: "photo", additionalParameter: { data: "extra" } });
-  pathImage = pathImage;
+  pathImage = environment.endpoint + '/images/usuarios/';
   imagenSeleccionada = "placeholder-image.png"
   changeImage: Boolean = false;
 
   //usuarios: Usuario[];
-  
+
   constructor(
     public usuariosService: UsuariosService,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar
+    private uiService: UiService
     ) {
       this.prepareColumns();
       this.prepareForm();
@@ -114,19 +113,15 @@ export class UsuarioComponent implements OnInit {
     })
   }
 
-  openSnackBar(mensaje:string) {
-    this._snackBar.open(mensaje,"", {
-      duration: this.configSnackBar.duration,
-      horizontalPosition: this.configSnackBar.x,
-      verticalPosition: this.configSnackBar.y
-    });
-  }
-
-  traerUsuariosPaginado() {
-    this.usuariosService.getUsuariosPaginado().subscribe( res => {
-      this.dato = res['data'] as Dato;
-    });
-  }
+   traerUsuariosPaginado() {
+      this.usuariosService.getUsuariosPaginado().subscribe( res => {
+         if(res['status'] == 'success'){
+            this.dato = res['data'] as Dato;
+         } else {
+            this.uiService.popup(res['message'], 'error');
+         }
+      });
+   }
 
   alta() {
     // agrega imagen
@@ -137,8 +132,6 @@ export class UsuarioComponent implements OnInit {
         let json = JSON.parse(response);
         this.myForm.get('imagen').setValue(json["data"]);
         this.guardar();
-        console.log(`ALTA: ${this.myForm.value}`);
-        
       };
     }
     // no agrega imagen
@@ -149,81 +142,39 @@ export class UsuarioComponent implements OnInit {
   }
 
   guardar(){
-    if(this.myForm.controls["_id"].value){
+   if(this.myForm.controls["_id"].value){
       // modificacion
-      this.usuariosService.modificarUsuario(this.myForm.controls["_id"].value, this.myForm.value).subscribe( () => {
-        this.resetForm();
-        this.openSnackBar("Se ha modificado correctamente");
+      this.usuariosService.modificarUsuario(this.myForm.controls["_id"].value, this.myForm.value).subscribe( res => {
+         if(res['status'] == 'success') {
+            this.resetForm();
+            this.uiService.popup(res['message'], 'ok');
+         }
+         this.uiService.popup(res['message'], 'error');
       });
     }
     // alta
     else{
-      let data = this.usuariosService.altaUsuario(this.myForm.value).subscribe( () => {
-        this.resetForm();
-        this.openSnackBar("Se ha generado correctamente");
+      let data = this.usuariosService.altaUsuario(this.myForm.value).subscribe( res => {
+         if(res['status'] == 'success') {
+            this.resetForm();
+            this.uiService.popup(res['message'], 'ok');
+         }
+         this.uiService.popup(res['message'], 'error');
       });
     }
   }
 
-  borrar(id) {
-    if(confirm("Estas seguro de querer borrarlo?")){
-      this.usuariosService.borrarUsuario(id).subscribe(() => { 
-        this.resetForm();
-        this.openSnackBar("Se ha borrado correctamente");
-       });
-    }
-  }
+   borrar(id) {
+      if(confirm("Estas seguro de querer borrarlo?")){
+         this.usuariosService.borrarUsuario(id).subscribe(res => {
+            if(res['status'] == 'success') {
+               this.resetForm();
+               this.uiService.popup(res['message'], 'ok');
+            }
+            this.uiService.popup(res['message'], 'error');
+         });
+      }
+   }
 
-  // modificar(event) {
-  //   if(event.type == 'click'){
-  //     let usuario: Usuario = event.row;
-  //     this.usuariosService.selectedUsuario = usuario;
-  //     this.myForm = this.fb.group({
-  //       _id: [usuario._id],
-  //       usuario: [usuario.usuario,[Validators.required]],
-  //       nombre: [usuario.nombre,[Validators.required]],
-  //       apellido: [usuario.apellido,[Validators.required]],
-  //       telefono: [usuario.telefono,[Validators.required]],
-  //       email: [usuario.email, Validators.email],
-  //       password: [usuario.password,[Validators.required]],
-  //     });
-  //   }
-  // }
 
-  // borrar(id) {
-  //   if(confirm("Estas seguro de querer borrarlo?")){
-  //     this.usuariosService.borrarUsuario(id).subscribe(() => {
-  //       this.traerUsuariosPaginado();
-  //       this.openSnackBar("Se ha borrado correctamente");
-  //     });
-  //   }
-  // }
-
-  // resetForm() {
-  //   this.myForm.reset();
-  //   this.prepareForm();
-  //   this.traerUsuariosPaginado();
-  // }
-
-  // setPage(pageInfo){
-  //   this.usuariosService.getUsuariosPaginado(pageInfo).subscribe( (data) =>{
-      
-  //     //Registros de productos (Informacion)
-  //     this.dato = data as Dato;
-  //     this.usuarios= this.dato.docs;
-
-  //     //La pagina que estoy consultando
-  //     this.dato.page = pageInfo["offset"];
-  //   })
-  // }
-
-  // openSnackBar(mensaje:string) {
-  //   this._snackBar.open(mensaje,"", {
-  //     duration: 2000,
-  //     horizontalPosition: "center",
-  //     verticalPosition: "top"
-  //   });
-  // }
-
-  
 } /*clase Usuario*/

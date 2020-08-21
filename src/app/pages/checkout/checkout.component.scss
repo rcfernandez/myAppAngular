@@ -12,12 +12,6 @@ html {
    scroll-behavior: smooth;
 }
 
-.card-form-img {
-   object-fit: cover;
-   height: 250px;
-   width: 50%;
-}
-
 table.tabla-pedido {
    border-collapse: collapse;
    tr {
@@ -68,14 +62,14 @@ table.tabla-usuario {
 }
 
 .form-btn-detalle {
-   text-align: right;
+   text-align: center;
    padding-top: 20px;
 }
 
 /* anula el click de los mat-step */
-// ::ng-deep .mat-horizontal-stepper-header{
-//    pointer-events: none !important;
-// }
+::ng-deep .mat-horizontal-stepper-header {
+   pointer-events: none !important;
+}
 
 .compra-paso3 {
    text-align: center;
@@ -91,5 +85,13 @@ table.tabla-usuario {
       display: block;
       text-align: center;
       margin: 2em auto;
+   }
+}
+
+.imagen-card-pedido {
+   img {
+      width: 15em;
+      height: 20em;
+      object-fit: contain;
    }
 }

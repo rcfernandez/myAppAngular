@@ -1,12 +1,16 @@
-
-.avatar-img img{
-    width: 50px;
-    height: auto;
+.avatar-img img {
+   width: 50px;
+   height: auto;
 }
 
 .card-avatar-img {
-    object-fit: cover;
-    img{
-        width: 80%;
-    }
+   object-fit: cover;
+   img {
+      width: 80%;
+   }
+}
+
+.card-form-img {
+   height: 200px;
+   object-fit: cover;
 }

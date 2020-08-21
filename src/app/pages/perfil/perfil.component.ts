@@ -6,6 +6,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import * as jwt_decode from 'jwt-decode';
 import { environment } from 'src/environments/environment';
 import { FileUploader } from 'ng2-file-upload';
+import { UiService } from 'src/app/services/ui.service';
 
 const pathFolder = './public/images/usuarios/'
 const UrlUpload = `${environment.endpoint}/upload?path=${pathFolder}`
@@ -30,7 +31,9 @@ export class PerfilComponent implements OnInit {
    changeImage: Boolean = false;
 
    constructor(
-      private fb: FormBuilder
+      private fb: FormBuilder,
+      private authService: AuthService,
+      private uiService: UiService
    ) {
    }
 
@@ -46,11 +49,11 @@ export class PerfilComponent implements OnInit {
          usuario: [this.usuario.usuario],
          nombre: [this.usuario.nombre,[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
          apellido: [this.usuario.apellido,[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
-         telefono: [this.usuario.telefono,Validators. required],
+         telefono: [this.usuario.telefono],
          email: [this.usuario.email, Validators.email],
-         password: [this.usuario.password, [Validators.required, Validators.minLength(2)]],
-         rol:[this.usuario.rol],
+         password: ['', [Validators.minLength(2)]],
          imagen: [this.usuario.imagen]
+         // rol:[this.usuario.rol],
       });
 
       this.imagenSeleccionada = this.usuario.imagen.filename;
@@ -61,7 +64,35 @@ export class PerfilComponent implements OnInit {
       if(event.type == 'change'){
         this.changeImage = true;
       }
+   }
+
+   actualizarUsuario() {
+      // agrega imagen
+      if(this.changeImage){
+
+        this.uploader.uploadAll();
+        this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
+          let json = JSON.parse(response);
+          this.myForm.get('imagen').setValue(json["data"]);
+          this.guardar();
+        };
+      }
+      // no agrega imagen
+      else {
+        this.guardar();
+      }
     }
+
+    // modificacion
+   guardar(){
+      this.authService.updateUser(this.myForm.value).subscribe( res => {
+         if(res['status'] == 'success') {
+            this.uiService.popup(res['message'], 'ok');
+         } else {
+            this.uiService.popup(res['message'], 'error');
+         }
+      });
+   }
 
 
 

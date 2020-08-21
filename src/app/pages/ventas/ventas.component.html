@@ -1,10 +1,8 @@
-<div class="container" style="margin: 20px 0 100px 0">
+<div class="container">
 
-    <div class="row">
-      <h1 class="titulo">Ventas</h1>
-    </div>
+   <app-titulo titulo="Ventas" subtitulo="Aqui puede ver todas las ventas realizadas"></app-titulo>
 
-    <div class="row">
+   <div class="row py-4">
 
       <!-- lado izquierdo -->
       <div class="col-md-3" style="margin-top: 10px;">
@@ -14,7 +12,7 @@
           <form class="example-form" [formGroup]="myForm">
 
             <!-- imagen -->
-            <img mat-card-image class="card-form-img" src="{{pathImage}}{{imagenSeleccionada}}">
+            <img mat-card-image src="{{pathImage}}{{imagenSeleccionada}}">
 
             <!-- id - readonly -->
             <mat-form-field class="example-full-width">
@@ -35,13 +33,13 @@
             <!-- usuario -->
             <mat-form-field class="example-full-width" >
               <mat-label>Usuario</mat-label>
-             <input matInput formControlName="usuario">
+             <input matInput formControlName="usuario" readonly="true">
             </mat-form-field>
 
             <!-- producto -->
             <mat-form-field class="example-full-width" >
               <mat-label>Producto</mat-label>
-             <input matInput formControlName="producto">
+             <input matInput formControlName="producto" readonly="true">
             </mat-form-field>
 
             <!-- cantidad -->
@@ -52,7 +50,7 @@
 
             <!-- total - oblig -->
             <mat-form-field class="example-full-width">
-              <mat-label>total</mat-label>
+              <mat-label>Total $$</mat-label>
               <input type="number" matInput formControlName="total">
               <mat-error *ngIf="myForm.get('total').hasError('required') && myForm.get('total').dirty ">
                 El campo es <strong>Requerido</strong>
@@ -79,13 +77,12 @@
             <!-- imagen - upload -->
             <!-- <input type="file" name="photo" ng2FileSelect [uploader]="uploader" (change)=onChange($event) /> -->
 
-            <mat-card-actions>
+            <mat-card-actions align="center">
               <button mat-raised-button color="primary" [disabled]="myForm.invalid" (click)="alta()">Modificar</button>
               <button mat-button (click)="resetForm()">Limpiar</button>
             </mat-card-actions>
 
           </form>
-
 
         </mat-card>
 
@@ -111,11 +108,31 @@
 
             <ngx-datatable-column name="Imagen" prop="imagen">
                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                  <img class="table-avatar-img" src="{{pathImage}}{{row.producto.imagen.filename}}">
+                  <img class="imagen-tabla-ventas" src="{{pathImage}}{{row.producto.imagen.filename}}">
+               </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Fecha" prop="fecha">
+               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  {{row.fecha | date }}
                </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop" ></ngx-datatable-column>
+
+            <ngx-datatable-column name="Medio" prop="medio">
+               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  <span *ngIf="row.medio == 1">Efectivo</span>
+                  <span *ngIf="row.medio == 2">Mercado Pago</span>
+               </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Estado" prop="estado">
+               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  <span class="no-pagado" *ngIf="row.estado == 0">NoPago</span>
+                  <span class="pagado" *ngIf="row.estado == 1">Pagado</span>
+               </ng-template>
+            </ngx-datatable-column>
 
             <ngx-datatable-column name="Acciones" prop="id" >
                <ng-template let-row="rows" let-value="value" ngx-datatable-cell-template>

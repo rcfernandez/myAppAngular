@@ -1,53 +1,35 @@
 <div class="container">
 
-   <div class="row">
+   <div class="row fila">
 
-      <div class="col-md-6 col-left">
-
-         <mat-card class="card-left">
-            <img
-               mat-card-image
-               src="{{ pathImage }}{{ data.imagen.filename }}"
-               alt="{{ data.imagen.originalname }}"
-            />
-         </mat-card>
-
+      <div class="col-md-6 col-sm-12 contenido-imagen">
+         <img src="{{ pathImage }}{{ data.imagen.filename }}" alt="{{ data.imagen.originalname }}" />
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-6 col-sm-12 contenido-detalle">
 
-         <mat-card class="example-card">
-            <mat-card-header>
-               <mat-card-title>{{ data.nombre }}</mat-card-title>
-            </mat-card-header>
+         <h1>{{ data.nombre }}</h1>
+         <p class="detalle-descripcion">{{ data.descripcion }}</p>
+         <!-- <p class="detalle-precio">$ {{ data.precio }}</p> -->
+         <ng-container *ngIf="data.oferta; else template">
+            <p class="detalle-precio" style="font-size:23px; text-decoration: line-through;">Precio: {{ data.precio | currency }}</p>
+            <p class="detalle-precio" style="color: red;">Oferta: {{ data.oferta | currency }}</p>
+         </ng-container>
+         <ng-template #template>
+            <p class="detalle-precio">{{ data.precio | currency }}</p>
+         </ng-template>
+         <mat-card-subtitle>Stock: {{ data.cantidad }}</mat-card-subtitle>
 
-            <mat-card-content>
-               <p>{{ data.descripcion }}</p>
-               <p>Precio: {{ data.precio }}</p>
-               <mat-card-subtitle
-                  >Categoria:
-                  {{ data.categoria.descripcion }}</mat-card-subtitle
-               >
-               <mat-card-subtitle>Stock: {{ data.cantidad }}</mat-card-subtitle>
-               <mat-card-subtitle>SKU: {{ data.sku }}</mat-card-subtitle>
-            </mat-card-content>
+         <div class="detalle-botones">
+            <mat-card-subtitle>Categoria: {{ data.categoria.descripcion }}</mat-card-subtitle>
+            <mat-card-subtitle>SKU: {{ data.sku }}</mat-card-subtitle>
+            <button mat-raised-button color="primary" [routerLink]="['/checkout', data._id]">Comprar</button>
 
-            <mat-card-actions align="center">
-               <button
-                  mat-button
-                  color="primary"
-                  [routerLink]="['/checkout', data._id]"
-               >
-                  Comprar
-               </button>
-               <button mat-button>Me gusta</button>
-            </mat-card-actions>
-
-         </mat-card>
+         </div>
 
       </div>
 
    </div>
-   <!--row-->
+
 </div>
-<!--container-->
+

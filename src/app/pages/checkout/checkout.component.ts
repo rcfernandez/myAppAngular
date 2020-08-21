@@ -13,6 +13,7 @@ import { VentasService } from 'src/app/services/ventas.service';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { UiService } from 'src/app/services/ui.service';
+import { MatStepperNext, MatStepper } from '@angular/material/stepper';
 
 
 const pathImageUsuario = `${environment.endpoint}/images/usuarios/`
@@ -80,14 +81,14 @@ export class CheckoutComponent implements OnInit {
   traerProducto(){
 
    this.productosService.getProductosById(this.idProducto).subscribe( res => {
-      this.producto = res as Producto;
+      this.producto = res['data'] as Producto;
 
       this.categoriaService.getCategoriaById(this.producto.categoria).subscribe( cat => {
          this.categoria = cat["data"] as Categoria;
       });
 
-      this.cantidadTotalForm.get("total").setValue(this.producto.precio);
-      this.ventaForm.get("total").setValue(this.producto.precio);
+      this.cantidadTotalForm.get("total").setValue(this.producto.oferta ? this.producto.oferta : this.producto.precio);
+      this.ventaForm.get("total").setValue(this.producto.oferta ? this.producto.oferta : this.producto.precio);
 
       this.llenarFormVenta();
 
@@ -127,8 +128,8 @@ export class CheckoutComponent implements OnInit {
 
    llenarFormVenta(){
 
-      const { _id, nombre, descripcion, precio, categoria, imagen } = this.producto
-      let newProducto = new Object({ _id, nombre, descripcion, precio, categoria, imagen })
+      const { _id, nombre, descripcion, precio, oferta, categoria, imagen } = this.producto
+      let newProducto = new Object({ _id, nombre, descripcion, precio, oferta, categoria, imagen })
 
       // guardo newProducto
       this.ventaForm.get("producto").setValue(newProducto);
@@ -140,7 +141,10 @@ export class CheckoutComponent implements OnInit {
 
       // total = precio * cantidad
       this.cantidadTotalForm.get("cantidad").valueChanges.subscribe( () => {
-         this.cantidadTotalForm.get("total").setValue( this.producto.precio * this.cantidadTotalForm.get("cantidad").value );
+         this.cantidadTotalForm.get("total").setValue(
+            this.producto.oferta ? this.producto.oferta * this.cantidadTotalForm.get("cantidad").value :
+                                     this.producto.precio * this.cantidadTotalForm.get("cantidad").value
+            );
       })
 
       // total
@@ -155,13 +159,18 @@ export class CheckoutComponent implements OnInit {
 
    }
 
-  realizarVenta(){
+  realizarVenta(stepper: MatStepper){
+
      if (confirm("Confirmar compra?")) {
-        this.ventaForm.get('fecha').setValue(Date.now())
+
+        this.ventaForm.get('fecha').setValue(Date.now().toString())
+
         this.ventasService.create(this.ventaForm.value).subscribe( res => {
             res['status'] == 'ok' ? this.uiService.popup(res['message'], 'ok') : this.uiService.popup(res['message'], 'error');
             this.classOk = "animate__animated animate__bounceInUp";
+            stepper.next();
         });
+
      }
 
   }

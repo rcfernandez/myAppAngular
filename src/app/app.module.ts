@@ -6,14 +6,13 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // *2 hay que agregarlo para que funcione el 'ngModel'
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { BrowserAnimationsModule, ɵBrowserAnimationBuilder } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TableListComponent } from './components/table-list/table-list.component';
 
 import { HomeComponent } from './pages/home/home.component';
 import { CategoriasComponent } from './pages/categorias/categorias.component';
 import { UsuarioComponent } from './pages/usuario/usuario.component';
 import { ProductosComponent } from './pages/productos/productos.component';
-import { RegistroComponent } from './pages/registro/registro.component';
 import { LoginComponent } from './pages/login/login.component';
 import { VentasComponent } from './pages/ventas/ventas.component';
 import { MaterialTableComponent } from './components/material-table/material-table.component';
@@ -34,13 +33,17 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { StatusFormComponent } from './components/status-form/status-form.component';
 import { CatalogoComponent } from './pages/catalogo/catalogo.component';
-import { CardProductoComponent } from './components/card-producto/card-producto.component';
+import { CardProductoComponent } from './components/card-producto.component';
 import { InterceptorsService } from './interceptors.service';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { ComprasComponent } from './pages/compras/compras.component';
-import { TituloComponent } from './components/titulo/titulo.component';
+import { TituloComponent } from './components/titulo.component';
 import { DialogRegistrarmeComponent } from './components/dialog-registrarme/dialog-registrarme.component';
+import { CardComprasComponent } from './components/card-compras.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { QuienesSomosComponent } from './pages/quienes-somos/quienes-somos.component';
+import { NuestraHistoriaComponent } from './pages/nuestra-historia/nuestra-historia.component';
 
 
 
@@ -49,7 +52,6 @@ import { DialogRegistrarmeComponent } from './components/dialog-registrarme/dial
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegistroComponent,
     NavbarComponent,
     UsuarioComponent,
     ProductosComponent,
@@ -70,9 +72,10 @@ import { DialogRegistrarmeComponent } from './components/dialog-registrarme/dial
     ComprasComponent,
     TituloComponent,
     DialogRegistrarmeComponent,
-
-    BrowserModule,
-    BrowserAnimationsModule
+    CardComprasComponent,
+    NotFoundComponent,
+    QuienesSomosComponent,
+    NuestraHistoriaComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,16 +1,53 @@
 .example-container .mat-form-field + .mat-form-field {
-  margin-left: 8px;
+   margin-left: 8px;
 }
 
 .example-right-align {
-  text-align: right;
+   text-align: right;
 }
 
 input.example-right-align::-webkit-outer-spin-button,
 input.example-right-align::-webkit-inner-spin-button {
-  display: none;
+   display: none;
 }
 
 input.example-right-align {
-  -moz-appearance: textfield;
+   -moz-appearance: textfield;
+}
+
+.imagen-login {
+   text-align: center;
+   img {
+      height: 10em;
+      margin: 1em 0;
+   }
+}
+
+.titulo-login {
+   text-align: center;
+   padding: 0 0 1em 0;
+   h1 {
+      font-size: 32px;
+      font-weight: 100;
+   }
+}
+
+.btn-entrar-login,
+.btn-registrarme-login {
+   text-align: center;
+   padding: 5px 0;
+}
+
+.btn-entrar-login {
+   padding-top: 10px;
+   button {
+      padding: 0.1em 5em;
+   }
+}
+
+.btn-registrarme-login {
+   button {
+      color: gray;
+      font-weight: 300;
+   }
 }

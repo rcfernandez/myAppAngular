@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from 'src/environments/environment';
-
-const configSnack = environment.configSnackBar
+import { UiService } from '../services/ui.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +13,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private authServices: AuthService,
     private router: Router,
-    public snackBar: MatSnackBar
+    private uiService: UiService
   ) {
 
   }
@@ -26,20 +23,13 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
     ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-      if(!this.authServices.isAuthenticated){
-         this.openSnackBar("No tienes permiso para esta pagina (guards)");
+      if(!this.authServices.isAuthenticated()){
+         this.uiService.popup("[Guard] Debes loguearte primero",'error');
          this.router.navigateByUrl("/")
          return false;
       }
+      // this.uiService.popup("[Guard] Tienes permiso de usuario :)", 'ok');
       return true;
-  }
-
-  openSnackBar(message: string) {
-     this.snackBar.open( message, "", {
-        horizontalPosition: configSnack.x,
-        verticalPosition: configSnack.y,
-        duration: configSnack.duration
-     });
   }
 
 }

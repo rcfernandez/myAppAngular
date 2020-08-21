@@ -1,15 +1,6 @@
 <div class="container">
 
-  <div class="row">
-    <div class="col-md-12 titulo">
-      <h1>{{titulo}}</h1>
-    </div>
-    <div class="col-md-12 subtitulo">
-      <h3>{{subtitulo}}</h3>
-    </div>
-  </div>
-
-  <mat-divider></mat-divider>
+  <app-titulo titulo="Productos" subtitulo="Aca pueden cargar los datos de los productos"></app-titulo>
 
   <div class="row py-4">
 
@@ -79,9 +70,9 @@
             <mat-icon matSuffix>attach_money</mat-icon>
           </mat-form-field>
 
-          <!-- cantidad -->
+          <!-- stock (cantidad) -->
           <mat-form-field class="example-full-width">
-            <mat-label>Cantidad</mat-label>
+            <mat-label>Stock</mat-label>
             <input type="number" matInput formControlName="cantidad" >
           </mat-form-field>
 
@@ -128,7 +119,7 @@
 
           <ngx-datatable-column name="Imagen" prop="imagen">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <img class="table-avatar-img" src="{{pathImage}}{{row.imagen.filename}}">
+              <img class="image-table-productos" src="{{pathImage}}{{row.imagen?.filename}}">
             </ng-template>
           </ngx-datatable-column>
 

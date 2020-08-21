@@ -11,38 +11,7 @@
 
                 <div class="row py-2">
 
-                    <div class="col-md-6">
-
-                        <h2 class="py-1">Tus Datos</h2>
-
-                        <div class="col-md-12" style="text-align: center;">
-                           <img *ngIf="usuario" mat-card-image class="card-form-img" src="{{pathImageUsuario}}{{usuario.imagen.filename}}">
-                        </div>
-
-
-                        <table *ngIf="usuario" class="tabla-usuario" style="width: 100%;">
-                            <tr>
-                                <td>Nombre</td>
-                                <td>{{ usuario.nombre }}</td>
-                            </tr>
-                            <tr>
-                                <td>Apellido</td>
-                                <td>{{ usuario.apellido }}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>{{ usuario.email }}</td>
-                            </tr>
-                            <tr>
-                                <td>Telefono</td>
-                                <td>{{ usuario.telefono }}</td>
-                            </tr>
-
-                        </table>
-
-                    </div>
-
-                    <div class="col-md-6">
+                    <div class="col-md-8 offset-md-2">
 
                         <form  [formGroup]="cantidadTotalForm" *ngIf="usuario">
                             <ng-template matStepLabel>Detalle de la compra</ng-template>
@@ -50,8 +19,8 @@
                             <h2 class="py-1">Tu Pedido</h2>
 
                             <!-- imagen -->
-                           <div class="col-md-12" style="text-align: center;">
-                              <img *ngIf="producto" mat-card-image class="card-form-img" src="{{pathImageProducto}}{{producto.imagen.filename}}">
+                           <div class="col-md-12 imagen-card-pedido" style="text-align: center;">
+                              <img *ngIf="producto" mat-card-image src="{{pathImageProducto}}{{producto.imagen.filename}}">
                            </div>
 
                             <table class="tabla-pedido" style="width: 100%;">
@@ -140,7 +109,7 @@
 
                   <div>
                      <button mat-button matStepperPrevious>Volver</button>
-                     <button mat-raised-button color="primary" matStepperNext [disabled]="ventaForm.invalid" (click)="realizarVenta()">Confirmar Compra</button>
+                     <button mat-raised-button color="primary" [disabled]="ventaForm.invalid" (click)="realizarVenta(stepper)">Confirmar Compra</button>
                   </div>
 
                </form>
@@ -153,7 +122,7 @@
                <ng-template matStepLabel>Listo</ng-template>
 
                <div class="col-md-12 compra-paso3">
-                  <p>Listo terminamos.</p>
+                  <p>Listo. Muchas Gracias!</p>
                   <img [class]="classOk" src="../../../assets/img/ok-icon.png">
 
                   <button mat-raised-button color="primary" routerLink="/compras">Ver mis compras</button>

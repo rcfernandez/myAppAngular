@@ -6,7 +6,7 @@
 
          <app-titulo subtitulo="Filtros"></app-titulo>
 
-         <mat-card>
+         <mat-card class="form-card">
 
             <form class="example-form" [formGroup]="myForm" (keyup)="onChangeForm()">
 
@@ -39,24 +39,23 @@
 
                <!-- acciones -->
                <mat-card-actions align="center">
-                  <button mat-raised-button color="primary">Buscar</button>
                   <button mat-stroked-button (click)="resetForm()">Limpiar</button>
                </mat-card-actions>
 
             </form>
+
+            <!--aclaracion: aun no filtra por precio de oferta-->
+            <span style="color: lightgray; font-size: 11px;">*Aún no filtra por precio de oferta</span>
+
+
          </mat-card>
 
       </div>
 
       <div class="col-md-9">
 
-            <app-titulo titulo="{{titulo}}"></app-titulo>    <!-- titulo, subtitulo -->
-            <ng-container *ngIf="productos;else templateNoData">
-               <app-card-producto [source]="productos"></app-card-producto>
-            </ng-container>
-            <ng-template #templateNoData>
-               <p style="padding: 50px;">No hay productos para mostrar</p>
-            </ng-template>
+         <app-titulo titulo="{{titulo}}"></app-titulo>    <!-- titulo, subtitulo -->
+         <app-card-producto [source]="productos" class='col-md-4'></app-card-producto>
 
       </div>
 

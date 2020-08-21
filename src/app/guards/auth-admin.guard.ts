@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { AuthService } from '../services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
-const configSnack = environment.configSnackBar
+import { UiService } from '../services/ui.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +13,7 @@ export class AuthAdminGuard implements CanActivate {
    constructor(
       private authServices: AuthService,
       private router: Router,
-      public snackBar: MatSnackBar
+      private uiService: UiService
    ){
 
    }
@@ -26,22 +23,14 @@ export class AuthAdminGuard implements CanActivate {
       state: RouterStateSnapshot
       ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-         if(this.authServices.isAuthenticatedAdmin()){
-            return true;
+         if(!this.authServices.isAuthenticatedAdmin()){
+            this.uiService.popup("[Guard] No tienes permiso de Admin para esta pagina", 'error');
+            this.router.navigateByUrl("/")
+            return false;
          }
-         this.openSnackBar("No tienes permiso de Admin para esta pagina (guards)");
-         this.router.navigateByUrl("/")
+         // this.uiService.popup("[Guard] Tienes permiso admin :)", 'ok');
+         return true;
 
-         return false;
-
-   }
-
-   openSnackBar(message: string) {
-      this.snackBar.open( message, "", {
-         horizontalPosition: configSnack.x,
-         verticalPosition: configSnack.y,
-         duration: configSnack.duration
-      });
    }
 
 }

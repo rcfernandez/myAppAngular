@@ -20,6 +20,8 @@ import { MatSnackBarModule }  from '@angular/material/snack-bar';
 import { MatDialogModule }  from '@angular/material/dialog';
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 
@@ -46,7 +48,9 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
     MatSnackBarModule,
     MatDialogModule,
     MatGridListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatPaginatorModule,
+    MatSidenavModule
   ],
   exports: [
     MatToolbarModule,
@@ -68,7 +72,9 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
     MatSnackBarModule,
     MatDialogModule,
     MatGridListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatPaginatorModule,
+    MatSidenavModule
   ]
 
 })

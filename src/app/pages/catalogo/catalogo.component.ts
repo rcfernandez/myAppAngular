@@ -31,7 +31,7 @@ export class CatalogoComponent implements OnInit {
    constructor(
       private productosService: ProductosService,
       public categoriasService: CategoriasService,
-      private fb: FormBuilder
+      private fb: FormBuilder,
    ) {
       this.prepareForm();
       this.traerTodasCategorias();
@@ -73,7 +73,6 @@ export class CatalogoComponent implements OnInit {
    onChangeForm(){
       this.productosService.getProductosByQuery(this.myForm.value).subscribe( res => {
          this.productos = res['data'] as Producto[];
-         console.log("res: ", res);
       })
    }
 
@@ -81,5 +80,6 @@ export class CatalogoComponent implements OnInit {
       this.myForm.reset();
       this.onChange();
    }
+
 
 } // end class

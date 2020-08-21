@@ -46,14 +46,14 @@ export class LoginComponent implements OnInit {
    }
 
    login() {
-      this.authService.login(this.myForm.value).subscribe((data) => {
-
-         if (data["message"]) {
-            data['status'] === 201 ? this.uiService.popup(data['message'], 'ok') : this.uiService.popup(data['message'], 'error')
+      this.authService.login(this.myForm.value).subscribe(res => {
+         if (res["message"]) {
+            // res['status'] === 201 ? this.uiService.popup('Bienvenido', 'ok') : this.uiService.popup(res['message'], 'error')
+            res['status'] != 201 ? this.uiService.popup(res['message'], 'error') : '';
          }
 
-         if (data["status"] === 201) {
-            localStorage.setItem("token", data["token"]);
+         if (res["status"] === 201) {
+            localStorage.setItem("token", res["token"]);
             this.authService.authenticationState.next(true);
             this.router.navigate(['/']);
          }

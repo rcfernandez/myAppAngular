@@ -10,19 +10,18 @@ import { Dato } from 'src/app/models/dato.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'src/environments/environment';
 import { FileUploader } from 'ng2-file-upload';
+import { UiService } from 'src/app/services/ui.service';
 
 const pathFolder = './public/images/ventas/';
 const UrlUpload = `${environment.endpoint}/upload?path=${pathFolder}`;
 const pathImage = `${environment.endpoint}/images/productos/`;
 
-const configSnackBar = environment.configSnackBar;
 
 @Component({
    selector: 'app-ventas',
    templateUrl: './ventas.component.html',
    styleUrls: ['./ventas.component.scss'],
 })
-
 
 export class VentasComponent implements OnInit {
 
@@ -44,7 +43,7 @@ export class VentasComponent implements OnInit {
       public productosService: ProductosService,
       public usuariosService: UsuariosService,
       private fb: FormBuilder,
-      private _snackBar: MatSnackBar
+      private uiService: UiService
    ) {
 
       this.prepareForm();
@@ -61,7 +60,7 @@ export class VentasComponent implements OnInit {
    prepareForm(){
       this.myForm = this.fb.group({
          _id: [''],
-         fecha: [Date.now(), Validators.required],
+         fecha: [Validators.required],
          usuario: ['', Validators.required],
          producto: ['', Validators.required],
          cantidad: [''],
@@ -73,13 +72,10 @@ export class VentasComponent implements OnInit {
 
    Columns(){
       this.columns = [
-         { name:'Fecha', prop:'fecha' },
+         { name:'Usuario',prop:'usuario.usuario' },
          { name:'Producto', prop:'producto.nombre' },
          { name:'Cantidad', prop:'cantidad' },
-         { name:'Total',prop:'total' },
-         { name:'Medio',prop:'medio' },
-         { name:'Estado',prop:'estado' },
-         { name:'Usuario',prop:'usuario.usuario' },
+         { name:'Total', prop:'total' },
       ]
    }
 
@@ -101,8 +97,8 @@ export class VentasComponent implements OnInit {
       this.myForm = this.fb.group({
       _id: [venta._id],
       fecha: [venta.fecha],
-      usuario: [venta.usuario],
-      producto: [venta.producto],
+      usuario: [venta.usuario.usuario],
+      producto: [venta.producto.nombre],
       cantidad: [venta.cantidad],
       total: [venta.total],
       medio: [venta.medio],
@@ -116,7 +112,7 @@ export class VentasComponent implements OnInit {
       this.imagenSeleccionada = 'placeholder-image.png';
       this.changeImage = false;
       // this.ventasService.getVentasPaginado();
-      this.setPage(this.dato.page)
+      this.setPage(this.dato.page);
 
    }
 
@@ -127,17 +123,9 @@ export class VentasComponent implements OnInit {
       })
    }
 
-   openSnackBar(mensaje:string) {
-      this._snackBar.open(mensaje,"", {
-         duration: configSnackBar.duration,
-         horizontalPosition: configSnackBar.x,
-         verticalPosition: configSnackBar.y
-      });
-   }
-
-
    traerVentasPaginado() {
       this.ventasService.getVentasPaginado().subscribe( res => {
+
          this.dato = res["data"] as Dato;
       });
    }
@@ -157,44 +145,40 @@ export class VentasComponent implements OnInit {
    alta() {
       // agrega imagen
       if(this.changeImage){
-      this.uploader.uploadAll();
-      this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
-         let json = JSON.parse(response);
-         this.myForm.get('imagen').setValue(json["data"]);
-         this.guardar();
-         console.log(`ALTA: ${this.myForm.value}`);
-
-      };
+         this.uploader.uploadAll();
+         this.uploader.onCompleteItem = ( item: any, response: any, status: any, headers: any) => {
+            let json = JSON.parse(response);
+            this.myForm.get('imagen').setValue(json["data"]);
+            this.modificar();
+            console.log(`ALTA: ${this.myForm.value}`);
+         };
       }
       // no agrega imagen
       else {
-      this.guardar();
+      this.modificar();
       console.log(`paso sin guardar imagen`);
       }
    }
 
-   guardar(){
-      if(this.myForm.controls["_id"].value){
-      // modificacion
-      this.ventasService.update(this.myForm.controls["_id"].value, this.myForm.value).subscribe(() => {
-         this.resetForm();
-         this.openSnackBar("Se ha modificado correctamente");
+   modificar(){
+      this.ventasService.update(this.myForm.controls["_id"].value, this.myForm.value).subscribe( res => {
+         if(res['status'] == 'success') {
+            this.uiService.popup(res['message'], 'ok');
+            this.setPage(this.dato.page);
+
+
+         } else {
+            this.uiService.popup(res['message'], 'error');
+         }
+
       });
-      }
-      // alta
-      else{
-      let data = this.ventasService.create(this.myForm.value).subscribe(() => {
-         this.resetForm();
-         this.openSnackBar("Se ha generado correctamente");
-      });
-      }
+
    }
 
    borrar(id: string) {
       if (confirm('Estas seguro de querer borrarlo?')) {
          this.ventasService.delete(id).subscribe(() => {
-         this.resetForm();
-         this.openSnackBar("Se ha borrado correctamente");
+            this.resetForm();
          });
       }
    }

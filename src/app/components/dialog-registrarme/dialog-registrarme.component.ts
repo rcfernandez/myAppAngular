@@ -242,14 +242,4 @@ export class DialogRegistrarmeComponent implements OnInit {
       })
    }
 
-
-   // openSnackBar(message: string) {
-   //    this.snackBar.open( message, "", {
-   //       horizontalPosition: configSnack.x,
-   //       verticalPosition: configSnack.y,
-   //       duration: 3000
-   //    });
-   // }
-
-
 }

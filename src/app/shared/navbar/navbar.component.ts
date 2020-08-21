@@ -1,16 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, Host, Input } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario } from 'src/app/models/usuario.model';
 import { environment } from 'src/environments/environment';
+import { UiService } from 'src/app/services/ui.service';
+import { MatSidenav } from '@angular/material/sidenav';
 
-import * as jwt_decode from 'jwt-decode';
-import { DecodeToken } from '../../models/decodeToken.model';
-
-const pathImage = `${environment.endpoint}/images/usuarios/`;
-const configSnack = environment.configSnackBar;
 
 @Component({
   selector: 'app-navbar',
@@ -20,26 +15,30 @@ const configSnack = environment.configSnackBar;
 
 export class NavbarComponent implements OnInit {
 
-  pathImage: string = pathImage;
+   pathImage: string = environment.endpoint + '/images/usuarios/';
 
-  buttonsCommon = [
-   { text: 'Inicio', link: '/' },
-   { text: 'Catalogo', link: 'catalogo' }
-  ];
+   buttonsCommon = [
+      { text: 'Inicio', link: 'home' },
+      { text: 'Catalogo', link: 'catalogo' },
+      { text: 'Quienes somos', link: 'quienes' },
+      // { text: 'Nuestra Historia', link: 'historia' }
+   ];
 
-  buttonsAdmin = [];
-  buttonsCategorias = [];
-  buttonsUser = [];
-  isLoginUser = false
-  isLoginAdmin = false
+   buttonsAdmin = [];
+   buttonsCategorias = [];
+   buttonsUser = [];
+   isLoginUser = false
+   isLoginAdmin = false
 
-  usuario: Usuario = null;
+   usuario: Usuario = null;
 
-  constructor(
-    public authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
+   @Input() inputSideNav: MatSidenav;
+
+   constructor(
+      public authService: AuthService,
+      private router: Router,
+      private uiService: UiService
+   ) {
 
       this.authService.isAuthenticate().subscribe( state => {
 
@@ -96,15 +95,7 @@ export class NavbarComponent implements OnInit {
    logout(){
       this.authService.logout();
       this.router.navigate(['/']);
-      this.openSnackBar("Se ha deslogueado correctamente");
-   }
-
-   openSnackBar(mensaje:string) {
-      this.snackBar.open(mensaje,"", {
-         duration: configSnack.duration,
-         horizontalPosition: configSnack.x,
-         verticalPosition: configSnack.y
-      });
+      this.uiService.popup('Se ha deslogueado correctamente', 'ok');
    }
 
 

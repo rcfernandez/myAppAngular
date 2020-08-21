@@ -1,7 +1,5 @@
 @import "../../../variables";
 
-
-
 // .card-left{
 //     width: 400px;
 //     object-fit: cover;
@@ -11,17 +9,43 @@
 //     background-color: red !important;
 // }
 
-
 // .container{
 //     background-color: $color-background-1 ;
 // }
 
+.fila {
+   height: 32em;
+}
 
-.container{
-    width: 1000px;
-    height: 500px;
+.contenido-imagen {
+   height: inherit;
+   img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 10px;
+   }
+}
 
-    .card-left img{
-        height: 100%;
-    }
+.contenido-detalle {
+   display: flex;
+   flex-direction: column;
+
+   h1 {
+      font-size: 2em;
+      font-weight: 500;
+      padding: 20px 0 0 0;
+   }
+
+   .detalle-descripcion {
+      font-size: 1.2em;
+      color: gray;
+      padding: 10px 0 0 0;
+   }
+
+   .detalle-precio {
+      font-size: 2em;
+      font-weight: 100;
+      padding: 10px 0;
+   }
 }
